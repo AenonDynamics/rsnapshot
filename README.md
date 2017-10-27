@@ -1,73 +1,31 @@
-# RSNAPSHOT [![Build Status](https://api.travis-ci.org/rsnapshot/rsnapshot.png)](https://travis-ci.org/rsnapshot/rsnapshot)
+[![Build Status](https://travis-ci.org/AenonDynamics/rsnapshot-ng.svg?branch=ng)](https://travis-ci.org/AenonDynamics/rsnapshot-ng)
 
-rsnapshot comes with ABSOLUTELY NO WARRANTY.  This is free software,
-and you are welcome to redistribute it under certain conditions.
-See the GNU General Public Licence for details.
+RSNAPSHOT-NG
+===============================================================================
 
-rsnapshot is a filesystem snapshot utility based on rsync. rsnapshot makes it
-easy  to make periodic snapshots of local machines, and remote machines over ssh.
-The code makes extensive use of hard links whenever possible, to greatly reduce
-the disk space required.
+**rsnapshot-ng comes with ABSOLUTELY NO WARRANTY.**
 
-It is written entirely in perl with no module dependencies, and has been
-tested with versions 5.004 through 5.16.3. It should work on any reasonably
-modern UNIX compatible OS. It has been tested successfully on the following
-operating systems:
+This is free software, and you are welcome to redistribute it under certain conditions. See the [GNU General Public Licence](LICENSE.md) for details.
 
- - Debian: 3.0 (woody), 3.1 (sarge), unstable (sid)
- - Redhat: 7.x, 8.0
- - RedHat Enterprise Linux: 3.0 ES, 5, 6
- - Fedora Core: 1, 3
- - Fedora: 17, 18
- - CentOS: 3, 4, 5, 6
- - WhiteBox Enterprise Linux 3.0
- - Slackware 9.0
- - SuSE: 9.0
- - FreeBSD 4.9-STABLE
- - OpenBSD 3.x
- - Solaris 8 (SPARC and x86)
- - Mac OS X
- - IRIX 6.5
+Features
+----------------------------------------------------------------------------------
 
-If this is your first experience with rsnapshot, you may want to read the
-rsnapshot HOWTO at http://www.rsnapshot.org/. The HOWTO will give you a detailed
-walk-through on how to get rsnapshot up and running in explicit detail.
+**rsnapshot-ng** is a fork of [rsnapshot](https://github.com/rsnapshot/rsnapshot) including some basic improvements and a modern build/test environment.
+
+rsnapshot is a filesystem snapshot utility based on rsync. rsnapshot makes it easy to make periodic snapshots of local machines, and remote machines over ssh.
+The code makes **extensive use of hard links** whenever possible, to greatly reduce the disk space required.
+
+It is written entirely in perl with no module dependencies, and has been tested with versions 5.004 through 5.16.3. It should work on any reasonably
+modern UNIX compatible OS.
+
+If this is your first experience with rsnapshot, you may want to read the rsnapshot HOWTO at http://www.rsnapshot.org/. 
+The HOWTO will give you a detailed walk-through on how to get rsnapshot up and running in explicit detail.
 
 For a reference of all available commands, see the rsnapshot man page.
 
-If you are upgrading from version 1.1.6 or earlier, make sure you read the
-file [Upgrading from 1.1](docs/Upgrading_from_1.1).
+Usage
+------------------------------------------------------
 
-For installation or upgrade instructions please read the [INSTALL](INSTALL.md) doc.
-
-If you want to work on improving rsnapshot please read the
-[CONTRIBUTING](CONTRIBUTING.md) doc.
-
-If you want to ask a question or have a general discussion use the
-[Mailing List](https://lists.sourceforge.net/lists/listinfo/rsnapshot-discuss).
-
-## COMPATIBILITY NOTICES (Please read)
-
- 1. Note that systems which use GNU cp version 5.9 or later will have problems
-    with rsnapshot versions up to and including 1.2.3, if `cmd_cp` is enabled
-    (and points at the later gnu cp).  This is no longer a problem since
-    rsnapshot 1.2.9, as it strips off trailing slashes when running cp.
-
- 2. If you have rsync version 2.5.7 or later, you may want to enable the
-    link_dest parameter in the rsnapshot.conf file.
-
-    If you are running Linux but do not have the problem above, you should
-    enable the `cmd_cp` parameter in rsnapshot.conf (especially if you do not
-    have link_dest enabled).
-
-    Be advised that currently `link_dest` doesn't do well with unavailable hosts.
-    Specifically, if a remote host is unavailable using `link_dest`, there will
-    be no latest backup of that machine, and a full re-sync will be required
-    when it becomes available. Using the other methods, the last good snapshot
-    will be preserved, preventing the need for a re-sync. We hope to streamline
-    this in the future.
-
-## CONFIGURATION
 Once you have installed rsnapshot, you will need to configure it.
 The default configuration file is /etc/rsnapshot.conf, although the exact path
 may be different depending on how the program was installed. If this
@@ -136,10 +94,47 @@ or visit http://www.rsnapshot.org/.  The HowTo on the web site has a
 detailed overview of how to install and configure rsnapshot, and things
 like how to set it up so users can restore their own files.
 
-If you plan on using the `backup_script` parameter in your backup scheme,
-take a look at the `utils/`-directory in the source distribution for several
-example scripts.  The `utils/rsnapreport.pl` script is well worth a look.
+References
+--------------------------------------------------------------
 
-## AUTHORS
+Some recommended tutorials/usage guides
 
-Please see the [AUTHORS](/AUTHORS) file for the complete list of contributors.
+* [archlinux.de - Tutorial](https://wiki.archlinux.de/title/Rsnapshot)
+* [ubuntuusers.de - Tutorial](https://wiki.ubuntuusers.de/rsnapshot/)
+* [thomas-krenn.com - Backup unter Linux mit rsnapshot](https://www.thomas-krenn.com/de/wiki/Backup_unter_Linux_mit_rsnapshot)
+
+
+COMPATIBILITY NOTICES
+--------------------------------------------------------------
+
+ 1. Note that systems which use GNU cp version 5.9 or later will have problems
+    with rsnapshot versions up to and including 1.2.3, if `cmd_cp` is enabled
+    (and points at the later gnu cp).  This is no longer a problem since
+    rsnapshot 1.2.9, as it strips off trailing slashes when running cp.
+
+ 2. If you have rsync version 2.5.7 or later, you may want to enable the
+    link_dest parameter in the rsnapshot.conf file.
+
+    If you are running Linux but do not have the problem above, you should
+    enable the `cmd_cp` parameter in rsnapshot.conf (especially if you do not
+    have link_dest enabled).
+
+    Be advised that currently `link_dest` doesn't do well with unavailable hosts.
+    Specifically, if a remote host is unavailable using `link_dest`, there will
+    be no latest backup of that machine, and a full re-sync will be required
+    when it becomes available. Using the other methods, the last good snapshot
+    will be preserved, preventing the need for a re-sync. We hope to streamline
+    this in the future.
+
+Authors
+--------------------------------------------------------
+
+Please see the [AUTHORS](AUTHORS,md) file for the complete list of contributors.
+
+
+License
+-------
+
+**rsnapshot-ng** is OpenSource and licensed under the Terms of [GNU General Public Licence v2](LICENSE.md). You're welcome to contribute!
+
+Many Thanks to the authors of the original [rsnapshot](https://github.com/rsnapshot/rsnapshot)
