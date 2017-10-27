@@ -524,19 +524,21 @@ sub parse_config_file {
 		if (is_blank($line)) { next; }
 
 		# if the next line begins with space or tab and also has a non-space character, then it belongs to this line as a continuation.
-		while (defined($configs[$file_line_num]) && $configs[$file_line_num] =~ /^[\t ]+\S/) {
-			(my $newline = $configs[$file_line_num]) =~ s/^\s+|\s+$//g;
-			$line = $line . "\t" . $newline;
-			$file_line_num++;
-		}
+		#while (defined($configs[$file_line_num]) && $configs[$file_line_num] =~ /^[\t ]+\S/) {
+		#	(my $newline = $configs[$file_line_num]) =~ s/^\s+|\s+$//g;
+		#		$line = $line . "\t" . $newline;
+		#	$file_line_num++;
+		#}
 
 		# parse line
-		my ($var, $value, $value2, $value3) = split(/\t+/, $line, 4);
+		# any whitespace character is allowed as separator
+		# keyword value0 [value1, [value2]] 
+		my ($var, $value, $value2, $value3) = ($line =~ /^([a-z_]+)\s+([^\s]+)(?:\s+([^\s]+))?(?:\s+(.+))?$/);
 
 		# warn about entries we don't understand, and immediately prevent the
 		# program from running or parsing anything else
 		if (!defined($var)) {
-			config_err($file_line_num, "$line - could not find a first word on this line");
+			config_err($file_line_num, "$line - could not find keyword on this line");
 			next;
 		}
 		if (!defined($value) && $var eq $line) {
@@ -545,7 +547,7 @@ sub parse_config_file {
 			if ($line =~ /\s/) {
 
 				# User put spaces in config line instead of tabs.
-				config_err($file_line_num, "$line - missing tabs to separate words - change spaces to tabs.");
+				config_err($file_line_num, "$line - missing tabs to separate words");
 				next;
 			}
 			else {

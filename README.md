@@ -23,6 +23,8 @@ The [HOWTO](HOWTO.md) will give you a detailed walk-through on how to get rsnaps
 Enhancements
 ------------------------------------------------------
 
+* `rsync` output is shown on verbosity level >= 3
+* 
 
 Documentation and References
 --------------------------------------------------------------
@@ -34,8 +36,15 @@ Some recommended tutorials/usage guides
 * [ubuntuusers.de - Tutorial](https://wiki.ubuntuusers.de/rsnapshot/)
 * [thomas-krenn.com - Backup unter Linux mit rsnapshot](https://www.thomas-krenn.com/de/wiki/Backup_unter_Linux_mit_rsnapshot)
 
+Config File Syntax
+--------------------------------------------------------------
+
+**keyword** `value0` [`value1` [ `value2`]]
+
+
 Usage
 ------------------------------------------------------
+
 
 Once you have installed rsnapshot, you will need to configure it.
 The default configuration file is /etc/rsnapshot.conf, although the exact path
