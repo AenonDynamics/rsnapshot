@@ -554,25 +554,6 @@ sub parse_config_file {
 			print_warn("$line - extra space found between tab and $_");
 		}
 
-		# INCLUDEs
-		if ($var eq 'include_conf') {
-			$value =~ /^`(.*)`$/;
-			if (   (defined($value) && -f $value && -r $value)
-				|| (defined($1) && is_valid_script($1))) {
-				$line_syntax_ok = 1;
-				parse_config_file($value);
-			}
-			else {
-				if (defined($1)) {
-					config_err($file_line_num, "$line - not a valid script: '$1'");
-				}
-				else {
-					config_err($file_line_num, "$line - can't find or read file '$value'");
-				}
-				next;
-			}
-		}
-
 		# CONFIG_VERSION
 		if ($var eq 'config_version') {
 			if (defined($value)) {
