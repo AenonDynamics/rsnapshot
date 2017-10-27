@@ -1,13 +1,12 @@
-#!@PERL@ -w
+#!/usr/bin/env perl
 
 ########################################################################
 #                                                                      #
-# rsnapshot                                                            #
-# by Nathan Rosenquist                                                 #
-# now maintained by Benedikt Heine                                     #
+# rsnapshot-ng                                                         #
+# https://github.com/AenonDynamics/rsnapshot-ng                        #
 #                                                                      #
-# The official rsnapshot website is located at                         #
-# http://www.rsnapshot.org/                                            #
+# a fork of the classic rsnapshot                                      #
+# by Nathan Rosenquist, maintained by Benedikt Heine                   #
 #                                                                      #
 # Copyright (C) 2003-2005 Nathan Rosenquist                            #
 #                                                                      #
@@ -33,7 +32,8 @@
 ###         STANDARD MODULES         ###
 ########################################
 
-require 5.004;
+require 5.014;
+use warnings;
 use strict;
 use DirHandle;               # DirHandle()
 use Cwd;                     # cwd()
@@ -63,13 +63,13 @@ my $have_lchown = 0;
 $| = 1;
 
 # version of rsnapshot
-my $VERSION = '@VERSION@';
+my $VERSION = '1.5.0';
 
 # command or interval to execute (first cmd line arg)
 my $cmd;
 
 # default configuration file
-my $config_file;
+my $config_file = '/etc/rsnapshot.conf';
 
 # hash to hold variables from the configuration file
 my %config_vars;
@@ -204,10 +204,6 @@ $SIG{'PIPE'} = sub {
 
 # what follows is a linear sequence of events.
 # all of these subroutines will either succeed or terminate the program safely.
-
-# figure out the path to the default config file (with autoconf we have to check)
-# this sets $config_file to the full config file path
-find_config_file();
 
 # parse command line options
 # (this can override $config_file, if the -c flag is used on the command line)
@@ -403,42 +399,6 @@ sub VERSION_MESSAGE {
 # For Getopt::Std
 sub HELP_MESSAGE {
 	show_help;
-}
-
-# accepts no arguments
-# sets the $config_file global variable
-#
-# this program works both "as-is" in the source tree, and when it has been parsed by autoconf for installation
-# the variables with "@" symbols on both sides get replaced during ./configure
-# this subroutine returns the correct path to the default config file
-#
-sub find_config_file {
-
-	# autoconf variables (may have too many slashes)
-	my $autoconf_sysconfdir = '@sysconfdir@';
-	my $autoconf_prefix     = '@prefix@';
-	my $default_config_file = '/etc/rsnapshot.conf';
-
-	# consolidate multiple slashes
-	$autoconf_sysconfdir =~ s/\/+/\//g;
-	$autoconf_prefix =~ s/\/+/\//g;
-
-	# remove trailing slashes
-	$autoconf_sysconfdir =~ s/\/$//g;
-	$autoconf_prefix =~ s/\/$//g;
-
-	# if --sysconfdir was not set explicitly during ./configure, but we did use autoconf
-	if ($autoconf_sysconfdir eq '${prefix}/etc') {
-		$default_config_file = "$autoconf_prefix/etc/rsnapshot.conf";
-
-		# if --sysconfdir was set explicitly at ./configure, overriding the --prefix setting
-	}
-	elsif ($autoconf_sysconfdir ne ('@' . 'sysconfdir' . '@')) {
-		$default_config_file = "$autoconf_sysconfdir/rsnapshot.conf";
-	}
-
-	# set global variable
-	$config_file = $default_config_file;
 }
 
 # accepts no args
@@ -3916,7 +3876,7 @@ sub rsync_backup_point {
 			$rsync_out->autoflush();
 
 			while (<$rsync_out>) {
-				print_msg($_, 4);
+				print_msg($_, 3);
 			}
 
 			waitpid($pid, 0);
