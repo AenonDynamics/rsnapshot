@@ -23,8 +23,9 @@ The [HOWTO](HOWTO.md) will give you a detailed walk-through on how to get rsnaps
 Enhancements
 ------------------------------------------------------
 
+* Config files can contain **spaces** and **tabs** as delimiters
+* Pure Perl script without build system - you can used it directly on any device
 * `rsync` output is shown on verbosity level >= 3
-* 
 
 Documentation and References
 --------------------------------------------------------------
@@ -39,46 +40,49 @@ Some recommended tutorials/usage guides
 Config File Syntax
 --------------------------------------------------------------
 
-**keyword** `value0` [`value1` [ `value2`]]
+The config file syntax has changed compared to the classic rsnapshot files.
 
+Now it's allowed to use any kind of whitespaces (**spaces** and **tabs**) as command/value delimiter. To identify the "new" version you have to set `config_version 1.3` (compatibility)
+
+Syntax: **keyword** `value0` [`value1` [ `value2`]]
 
 Usage
 ------------------------------------------------------
 
-
 Once you have installed rsnapshot, you will need to configure it.
-The default configuration file is /etc/rsnapshot.conf, although the exact path
-may be different depending on how the program was installed. If this
-file does not exist, copy `/etc/rsnapshot.conf.default` over to
-`/etc/rsnapshot.conf` and edit it to suit your tastes. See the man page for
-the full list of configuration options.
+The default configuration file is /etc/rsnapshot.conf, although the exact path may be different depending on how the program was installed. 
+If this file does not exist, copy `rsnapshot.default.conf` over to `/etc/rsnapshot.conf` and edit it to suit your tastes. 
+See the man page for the full list of configuration options.
 
-When `/etc/rsnapshot.conf` contains your chosen settings, do a quick sanity
-check to make sure everything is ready to go:
+When `/etc/rsnapshot.conf` contains your chosen settings, do a quick sanity check to make sure everything is ready to go:
 
-    $ rsnapshot configtest
+```terminal
+$ rsnapshot configtest
+```
 
-If this works, you can see essentially what will happen when you run it for
-real by executing the following command (where interval is `alpha`, `beta`, `etc`):
+If this works, you can see essentially what will happen when you run it for real by executing the following command (where interval is `alpha`, `beta`, `etc`):
 
-    $ rsnapshot -t [interval]
+```terminal
+$ rsnapshot -t [interval]
+```
 
 Once you are happy with everything, the final step is to setup a cron job to
 automate your backups. Here is a quick example which makes backups every four
 hours, and beta backups for a week:
 
-    0 */4 * * *     /usr/local/bin/rsnapshot alpha
-    50 23 * * *     /usr/local/bin/rsnapshot beta
+```conf
+0 */4 * * *     /usr/local/bin/rsnapshot alpha
+50 23 * * *     /usr/local/bin/rsnapshot beta
+```
 
-In the previous example, there will be six `alpha` snapshots
-taken each day (at 0,4,8,12,16, and 20 hours). There will also
-be beta snapshots taken every night at 11:50PM. The number of
-snapshots that are saved depends on the "interval" settings in
-/etc/rsnapshot.conf.
+In the previous example, there will be six `alpha` snapshots taken each day (at 0,4,8,12,16, and 20 hours). There will also
+be beta snapshots taken every night at 11:50PM. The number of snapshots that are saved depends on the "interval" settings in `/etc/rsnapshot.conf`
 
 For example:
 
-    interval	alpha		6
+```conf
+interval alpha 6
+```
 
 This means that every time `rsnapshot alpha` is run, it will make a
 new snapshot, rotate the old ones, and retain the most recent six
@@ -87,9 +91,11 @@ new snapshot, rotate the old ones, and retain the most recent six
 If you prefer instead to have three levels of backups (which we'll
 call `beta`, `gamma` and `delta`), you might set up cron like this:
 
-    00 00 * * *     /usr/local/bin/rsnapshot beta
-    00 23 * * 6     /usr/local/bin/rsnapshot gamma
-    00 22 1 * *     /usr/local/bin/rsnapshot delta
+```conf
+00 00 * * *     /usr/local/bin/rsnapshot beta
+00 23 * * 6     /usr/local/bin/rsnapshot gamma
+00 22 1 * *     /usr/local/bin/rsnapshot delta
+```
 
 This specifies a `beta` rsnapshot at midnight, a `gamma` snapshot
 on Saturdays at 11:00pm and a `delta` rsnapshot at 10pm on the
