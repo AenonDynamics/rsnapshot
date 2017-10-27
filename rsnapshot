@@ -523,13 +523,6 @@ sub parse_config_file {
 		# ignore blank lines
 		if (is_blank($line)) { next; }
 
-		# if the next line begins with space or tab and also has a non-space character, then it belongs to this line as a continuation.
-		#while (defined($configs[$file_line_num]) && $configs[$file_line_num] =~ /^[\t ]+\S/) {
-		#	(my $newline = $configs[$file_line_num]) =~ s/^\s+|\s+$//g;
-		#		$line = $line . "\t" . $newline;
-		#	$file_line_num++;
-		#}
-
 		# parse line
 		# any whitespace character is allowed as separator
 		# keyword value0 [value1, [value2]] 
