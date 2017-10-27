@@ -1,0 +1,92 @@
+**Mike Rubel** - http://www.mikerubel.org/computers/rsync_snapshots/
+* Created the original shell scripts on which this project is based
+
+**Nathan Rosenquist**
+* Primary author and ex-maintainer of rsnapshot (until 2005).
+
+**Benedikt Heine** <bebe@bebehei.de>
+* current maintainer of rsnapshot (2015-)
+
+**David Cantrell** <david@cantrell.org.uk>
+* ex-maintainer of rsnapshot (2005-2007)
+* Wrote the rsnapshot-diff utility
+
+**David Keegel** <djk@cybersource.com.au>
+* ex-maintainer of rsnapshot (2008-2015)
+* Allowed remote ssh directory paths starting with "~/" as well as "/"
+* Fixed race condition in lock file creation, improved error reporting
+* Fixed a number of other bugs and buglets
+* Release management for rsnapshot 1.2.9, 1.3.0
+
+**Carl Wilhelm Soderstrom** <chrome@real-time.com>
+* Created the RPM .spec file which allowed the RPM package to be built, among other things.
+
+**Ted Zlatanov** <tzz@lifelogs.com>
+* Added the one_fs feature, autoconf support, good advice, and much more.
+
+**Ralf van Dooren** <r.vdooren@snow.nl>
+* Added and maintains the rsnapshot entry in the FreeBSD ports tree.
+
+**SlapAyoda**
+* Provided access to his computer museum for software testing.
+
+**Carl Boe** <boe@demog.berkeley.edu>
+* Found several subtle bugs and provided fixes for them.
+
+**Shane Liebling** <shane@cryptio.net>
+* Fixed a compatibility bug in utils/backup_smb_share.sh
+
+**Christoph Wegscheider** <christoph.wegscheider@wegi.net>
+* Added and maintains the Debian rsnapshot package
+
+**Bharat Mediratta** <bharat@menalto.com>
+* Improved the exclusion rules to avoid backing up the snapshot root (among other things).
+
+**Peter Palfrader** <weasel@debian.org>
+* Enhanced error reporting to include command line options
+
+**Nicolas Kaiser** <nikai@nikai.net>
+* Fixed typos in program and man page
+
+**Chris Petersen** - http://www.forevermore.net/
+* Added cwrsync permanent-share support
+
+**Robert Jackson** <RobertJ@promedicalinc.com>
+* Added use_lazy_deletes option
+
+**Justin Grote** <justin@grote.name>
+* Improved rsync error reporting code
+
+**Anthony Ettinger** <aettinger@sdsualumni.org>
+* Wrote the utils/mysqlbackup.pl script
+* Wrote utils/rsnapshotdb
+
+**Sherman Boyd**
+* Wrote the utils/random_file_verify.sh script
+
+**William Bear** <bear@umn.edu>
+* Wrote the utils/rsnapreport.pl script (pretty summary of rsync stats)
+
+**Eric Anderson** <anderson@centtech.com>
+* Improvements to utils/rsnapreport.pl.
+
+**Alan Batie** <alan@batie.org>
+* Bug fixes for include_conf
+
+**Dieter Bloms** <dieter@bloms.de>
+* Multi-line configuration options
+
+**Henning Moll** <newsScott@gmx.de>
+* Added stop_on_stale_lockfile
+
+**Ben Low** <ben@bdlow.net>
+* Added support for Linux LVM snapshots
+
+**David Grant** <davidgrant@gmail.com>
+* Added support for retrying rsync "rsync_numtries" number of times
+
+**Matt McCutchen** <matt@mattmccutchen.net>
+* Wrote rsnapshot-copy (to copy snapshot roots using rsync --link-dest)
+
+**Imran Chaudhry** <ichaudhry@gmail.com>
+* Added -H to rsnapshot-diff
