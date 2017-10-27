@@ -1,3 +1,7 @@
+**Andi Dittrich** - https://andidittrich.de
+* Created the **rsnapshot-ng** fork
+* current maintainer of rsnapshot-ng (as of 2017)
+
 **Mike Rubel** - http://www.mikerubel.org/computers/rsync_snapshots/
 * Created the original shell scripts on which this project is based
 
@@ -5,7 +9,7 @@
 * Primary author and ex-maintainer of rsnapshot (until 2005).
 
 **Benedikt Heine** <bebe@bebehei.de>
-* current maintainer of rsnapshot (2015-)
+* current maintainer of rsnapshot (2015-2017)
 
 **David Cantrell** <david@cantrell.org.uk>
 * ex-maintainer of rsnapshot (2005-2007)
