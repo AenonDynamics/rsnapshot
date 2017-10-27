@@ -860,7 +860,7 @@ sub parse_config_file {
 		# still call it 'interval'.  Documentation and messages should
 		# refer to 'retain'.  The old 'interval' will be kept as an
 		# alias.
-		if ($var eq 'interval' || $var eq 'retain') {
+		if ($var eq 'retain') {
 			my $retain = $var;    # either 'interval' or 'retain'
 			                      # check if interval is blank
 			if (!defined($value)) { config_err($file_line_num, "$line - $retain can not be blank"); }
