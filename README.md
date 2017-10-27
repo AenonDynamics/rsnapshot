@@ -18,10 +18,21 @@ The code makes **extensive use of hard links** whenever possible, to greatly red
 It is written entirely in perl with no module dependencies, and has been tested with versions 5.004 through 5.16.3. It should work on any reasonably
 modern UNIX compatible OS.
 
-If this is your first experience with rsnapshot, you may want to read the rsnapshot HOWTO at http://www.rsnapshot.org/. 
-The HOWTO will give you a detailed walk-through on how to get rsnapshot up and running in explicit detail.
+The [HOWTO](HOWTO.md) will give you a detailed walk-through on how to get rsnapshot up and running in explicit detail.
 
-For a reference of all available commands, see the rsnapshot man page.
+Enhancements
+------------------------------------------------------
+
+
+Documentation and References
+--------------------------------------------------------------
+
+Some recommended tutorials/usage guides
+
+* [rsnapshot HOWTO](HOWTO.md)
+* [archlinux.de - Tutorial](https://wiki.archlinux.de/title/Rsnapshot)
+* [ubuntuusers.de - Tutorial](https://wiki.ubuntuusers.de/rsnapshot/)
+* [thomas-krenn.com - Backup unter Linux mit rsnapshot](https://www.thomas-krenn.com/de/wiki/Backup_unter_Linux_mit_rsnapshot)
 
 Usage
 ------------------------------------------------------
@@ -93,15 +104,6 @@ For the full documentation, type `man rsnapshot` once it is installed,
 or visit http://www.rsnapshot.org/.  The HowTo on the web site has a
 detailed overview of how to install and configure rsnapshot, and things
 like how to set it up so users can restore their own files.
-
-References
---------------------------------------------------------------
-
-Some recommended tutorials/usage guides
-
-* [archlinux.de - Tutorial](https://wiki.archlinux.de/title/Rsnapshot)
-* [ubuntuusers.de - Tutorial](https://wiki.ubuntuusers.de/rsnapshot/)
-* [thomas-krenn.com - Backup unter Linux mit rsnapshot](https://www.thomas-krenn.com/de/wiki/Backup_unter_Linux_mit_rsnapshot)
 
 
 COMPATIBILITY NOTICES
