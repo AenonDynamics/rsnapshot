@@ -558,14 +558,14 @@ sub parse_config_file {
 		if ($var eq 'config_version') {
 			if (defined($value)) {
 
-				# right now 1.2 is the only possible value
-				if ('1.2' eq $value) {
+				# 1.3 is require for rsnapshot-ng
+				if ('1.3' eq $value) {
 					$config_vars{'config_version'} = $value;
 					$line_syntax_ok = 1;
 					next;
 				}
 				else {
-					config_err($file_line_num, "$line - config_version not recognized!");
+					config_err($file_line_num, "$line - config_version 1.3-ng is required!");
 					next;
 				}
 			}
