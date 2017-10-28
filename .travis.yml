@@ -15,5 +15,9 @@ install:
 script:
   # syntax check
   - perl -Mstrict -Mdiagnostics -cw rsnapshot
+  # show node version
+  - node -v
+  - npm -v
+  - echo $PATH
   # run javascript based tests
   - npm test
