@@ -4,6 +4,8 @@ CHANGELOG
 ## NG 1.5.0 ##
 
 * Project Cleanup (Removed outdated utils, build tools/makefile)
+* Changed: Any kind of whitespaces (spaces, tabs) are allowed as config delimiter
+* Changed: `config_version` **1.3** required for rsnapshot-ng
 * Changed Documentation to Markdown
 * Replaced build variables `@VALUE@` with static values
 * Renamed rsnapshot binary to `rsnapshot`

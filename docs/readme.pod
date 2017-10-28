@@ -1,0 +1,1237 @@
+
+########################################
+###          PERLDOC / POD           ###
+########################################
+
+=pod
+
+=head1 NAME
+
+rsnapshot - remote filesystem snapshot utility
+
+=head1 SYNOPSIS
+
+B<rsnapshot> [B<-vtxqVD>] [B<-c> cfgfile] [command] [args]
+
+=head1 DESCRIPTION
+
+B<rsnapshot> is a filesystem snapshot utility. It can take incremental
+snapshots of local and remote filesystems for any number of machines.
+
+Local filesystem snapshots are handled with B<rsync(1)>. Secure remote
+connections are handled with rsync over B<ssh(1)>, while anonymous
+rsync connections simply use an rsync server. Both remote and local
+transfers depend on rsync.
+
+B<rsnapshot> saves much more disk space than you might imagine. The amount
+of space required is roughly the size of one full backup, plus a copy
+of each additional file that is changed. B<rsnapshot> makes extensive
+use of hard links, so if the file doesn't change, the next snapshot is
+simply a hard link to the exact same file.
+
+B<rsnapshot> will typically be invoked as root by a cron job, or series
+of cron jobs. It is possible, however, to run as any arbitrary user
+with an alternate configuration file.
+
+All important options are specified in a configuration file, which is
+located by default at B</etc/rsnapshot.conf>. An alternate file can be
+specified on the command line. There are also additional options which
+can be passed on the command line.
+
+The command line options are as follows:
+
+=over 4
+
+B<-v> verbose, show shell commands being executed
+
+B<-t> test, show shell commands that would be executed
+
+B<-c> path to alternate config file
+
+B<-x> one filesystem, don't cross partitions within each backup point
+
+B<-q> quiet, suppress non-fatal warnings
+
+B<-V> same as -v, but with more detail
+
+B<-D> a firehose of diagnostic information
+
+=back
+
+=head1 CONFIGURATION
+
+B</etc/rsnapshot.conf> is the default configuration file. All parameters
+in this file must be separated by tabs. B</etc/rsnapshot.conf.default>
+can be used as a reference.
+
+It is recommended that you copy B</etc/rsnapshot.conf.default> to
+B</etc/rsnapshot.conf>, and then modify B</etc/rsnapshot.conf> to suit
+your needs.
+
+Long lines may be split over several lines.  "Continuation" lines
+B<must> begin with a space or a tab character.  Continuation lines will
+have all leading and trailing whitespace stripped off, and then be appended
+with an intervening tab character to the previous line when the configuration
+file is parsed.
+
+Here is a list of allowed parameters:
+
+=over 4
+
+B<config_version>     Config file version (required). Default is 1.2
+
+B<snapshot_root>      Local filesystem path to save all snapshots
+
+B<include_conf>       Include another file in the configuration at this point.
+
+=over 4
+
+This is recursive, but you may need to be careful about paths when specifying
+which file to include.  We check to see if the file you have specified is
+readable, and will yell an error if it isn't.  We recommend using a full
+path.  As a special case, include_conf's value may be enclosed in `backticks`
+in which case it will be executed and whatever it spits to STDOUT will
+be included in the configuration.  Note that shell meta-characters may be
+interpreted.
+
+=back
+
+B<no_create_root>     If set to 1, rsnapshot won't create snapshot_root directory
+
+B<cmd_rsync>          Full path to rsync (required)
+
+B<cmd_ssh>            Full path to ssh (optional)
+
+B<cmd_cp>             Full path to cp  (optional, but must be GNU version)
+
+=over 4
+
+If you are using Linux, you should uncomment cmd_cp. If you are using a
+platform which does not have GNU cp, you should leave cmd_cp commented out.
+
+With GNU cp, rsnapshot can take care of both normal files and special
+files (such as FIFOs, sockets, and block/character devices) in one pass.
+
+If cmd_cp is disabled, rsnapshot will use its own built-in function,
+native_cp_al() to backup up regular files and directories. This will
+then be followed up by a separate call to rsync, to move the special
+files over (assuming there are any).
+
+=back
+
+B<cmd_rm>             Full path to rm (optional)
+
+B<cmd_logger>         Full path to logger (optional, for syslog support)
+
+B<cmd_du>             Full path to du (optional, for disk usage reports)
+
+B<cmd_rsnapshot_diff> Full path to rsnapshot-diff (optional)
+
+B<cmd_preexec>
+
+=over 4
+
+Full path (plus any arguments) to preexec script (optional).
+This script will run immediately before each backup operation (but not any
+rotations). If the execution fails, rsnapshot will stop immediately.
+
+=back
+
+B<cmd_postexec>
+
+=over 4
+
+Full path (plus any arguments) to postexec script (optional).
+This script will run immediately after each backup operation (but not any
+rotations). If the execution fails, rsnapshot will stop immediately.
+
+=back
+
+B<linux_lvm_cmd_lvcreate>
+
+B<linux_lvm_cmd_lvremove>
+
+B<linux_lvm_cmd_mount>
+
+B<linux_lvm_cmd_umount>
+
+=over 4
+
+Paths to lvcreate, lvremove, mount and umount commands, for use with Linux
+LVMs.  You may include options to the commands also.
+The lvcreate, lvremove, mount and umount commands are required for
+managing snapshots of LVM volumes and are otherwise optional.
+
+=back
+
+B<retain>             [name]   [number]
+
+=over 4
+
+"name" refers to the name of this backup level (e.g., alpha, beta,
+so also called the 'interval'). "number"
+is the number of snapshots for this type of interval that will be retained.
+The value of "name" will be the command passed to B<rsnapshot> to perform
+this type of backup.
+
+A deprecated alias for 'retain' is 'interval'.
+
+Example: B<retain alpha 6>
+
+[root@localhost]# B<rsnapshot alpha>
+
+For this example, every time this is run, the following will happen:
+
+<snapshot_root>/alpha.5/ will be deleted, if it exists.
+
+<snapshot_root>/alpha.{1,2,3,4} will all be rotated +1, if they exist.
+
+<snapshot_root>/alpha.0/ will be copied to <snapshot_root>/alpha.1/
+using hard links.
+
+Each backup point (explained below) will then be rsynced to the
+corresponding directories in <snapshot_root>/alpha.0/
+
+Backup levels must be specified in the config file in order, from most
+frequent to least frequent. The first entry is the one which will be
+synced with the backup points. The subsequent backup levels (e.g., beta,
+gamma, etc) simply rotate, with each higher backup level pulling from the
+one below it for its .0 directory.
+
+Example:
+
+=over 4
+
+B<retain  alpha 6>
+
+B<retain  beta  7>
+
+B<retain  gamma 4>
+
+=back
+
+beta.0/ will be moved from alpha.5/, and gamma.0/ will be moved from beta.6/
+
+alpha.0/ will be rsynced directly from the filesystem.
+
+=back
+
+B<link_dest           1>
+
+=over 4
+
+If your version of rsync supports --link-dest (2.5.7 or newer), you can enable
+this to let rsync handle some things that GNU cp or the built-in subroutines would
+otherwise do. Enabling this makes rsnapshot take a slightly more complicated code
+branch, but it's the best way to support special files on non-Linux systems.
+
+=back
+
+B<sync_first          1>
+
+=over 4
+
+sync_first changes the behaviour of rsnapshot. When this is enabled, all calls
+to rsnapshot with various backup levels simply rotate files. All backups are handled
+by calling rsnapshot with the "sync" argument. The synced files are stored in
+a ".sync" directory under the snapshot_root.
+
+This allows better recovery in the event that rsnapshot is interrupted in the
+middle of a sync operation, since the sync step and rotation steps are
+separated. This also means that you can easily run "rsnapshot sync" on the
+command line without fear of forcing all the other directories to rotate up.
+This benefit comes at the cost of one more snapshot worth of disk space.
+The default is 0 (off).
+
+=back
+
+B<verbose             2>
+
+=over 4
+
+The amount of information to print out when the program is run. Allowed values
+are 1 through 5. The default is 2.
+
+    1        Quiet            Show fatal errors only
+    2        Default          Show warnings and errors
+    3        Verbose          Show equivalent shell commands being executed
+    4        Extra Verbose    Same as verbose, but with more detail
+    5        Debug            All kinds of information
+
+=back
+
+B<loglevel            3>
+
+=over 4
+
+This number means the same thing as B<verbose> above, but it determines how
+much data is written to the logfile, if one is being written.
+
+=back
+
+B<logfile             /var/log/rsnapshot>
+
+=over 4
+
+Full filesystem path to the rsnapshot log file. If this is defined, a log file
+will be written, with the amount of data being controlled by B<loglevel>. If
+this is commented out, no log file will be written.
+
+=back
+
+B<include             [file-name-pattern]>
+
+=over 4
+
+This gets passed directly to rsync using the --include directive. This
+parameter can be specified as many times as needed, with one pattern defined
+per line. See the rsync(1) man page for the syntax.
+
+=back
+
+B<exclude             [file-name-pattern]>
+
+=over 4
+
+This gets passed directly to rsync using the --exclude directive. This
+parameter can be specified as many times as needed, with one pattern defined
+per line. See the rsync(1) man page for the syntax.
+
+=back
+
+B<include_file        /path/to/include/file>
+
+=over 4
+
+This gets passed directly to rsync using the --include-from directive. See the
+rsync(1) man page for the syntax.
+
+=back
+
+B<exclude_file        /path/to/exclude/file>
+
+=over 4
+
+This gets passed directly to rsync using the --exclude-from directive. See the
+rsync(1) man page for the syntax.
+
+=back
+
+B<rsync_short_args    -a>
+
+=over 4
+
+List of short arguments to pass to rsync. If not specified,
+"-a" is the default. Please note that these must be all next to each other.
+For example, "-az" is valid, while "-a -z" is not.
+
+"-a" is rsync's "archive mode" which tells it to copy as much of the
+filesystem metadata as it can for each file.  This specifically does *not*
+include information about hard links, as that would greatly increase rsync's
+memory usage and slow it down.  If you need to preserve hard links in your
+backups, then add "H" to this.
+
+=back
+
+B<rsync_long_args     --delete --numeric-ids --relative --delete-excluded>
+
+=over 4
+
+List of long arguments to pass to rsync.  The default values are
+    --delete --numeric-ids --relative --delete-excluded
+This means that the directory structure in each backup point destination
+will match that in the backup point source.
+
+Quotes are permitted in rsync_long_args, eg --rsync-path="sudo /usr/bin/rsync".
+You may use either single (') or double (") quotes, but nested quotes (including
+mixed nested quotes) are not permitted.  Similar quoting is also allowed in
+per-backup-point rsync_long_args.
+
+=back
+
+B<ssh_args    -p 22>
+
+=over 4
+
+Arguments to be passed to ssh. If not specified, the default is none.
+
+=back
+
+B<du_args     -csh>
+
+=over 4
+
+Arguments to be passed to du. If not specified, the default is -csh.
+GNU du supports -csh, BSD du supports -csk, Solaris du doesn't support
+-c at all. The GNU version is recommended, since it offers the most
+features.
+
+=back
+
+B<lockfile    /var/run/rsnapshot.pid>
+
+B<stop_on_stale_lockfile	0>
+
+=over 4
+
+Lockfile to use when rsnapshot is run. This prevents a second invocation
+from clobbering the first one. If not specified, no lock file is used.
+Make sure to use a directory that is not world writeable for security
+reasons.  Use of a lock file is strongly recommended.
+
+If a lockfile exists when rsnapshot starts, it will try to read the file
+and stop with an error if it can't.  If it *can* read the file, it sees if
+a process exists with the PID noted in the file.  If it does, rsnapshot
+stops with an error message.  If there is no process with that PID, then
+we assume that the lockfile is stale and ignore it *unless*
+stop_on_stale_lockfile is set to 1 in which case we stop.
+
+stop_on_stale_lockfile defaults to 0.
+
+=back
+
+B<one_fs    1>
+
+=over 4
+
+Prevents rsync from crossing filesystem partitions. Setting this to a value
+of 1 enables this feature. 0 turns it off. This parameter is optional.
+The default is 0 (off).
+
+=back
+
+B<use_lazy_deletes    1>
+
+=over 4
+
+Changes default behavior of rsnapshot and does not initially remove the
+oldest snapshot. Instead it moves that directory to _delete.[processid] and
+continues as normal. Once the backup has been completed, the lockfile will
+be removed before rsnapshot starts deleting the directory.
+
+Enabling this means that snapshots get taken sooner (since the delete doesn't
+come first), and any other rsnapshot processes are allowed to start while the
+final delete is happening. This benefit comes at the cost of using more
+disk space. The default is 0 (off).
+
+The details of how this works have changed in rsnapshot version 1.3.1.
+Originally you could only ever have one .delete directory per backup level.
+Now you can have many, so if your next (eg) alpha backup kicks off while the
+previous one is still doing a lazy delete you may temporarily have extra
+_delete directories hanging around.
+
+=back
+
+B<linux_lvm_snapshotsize    2G>
+
+=over 4
+
+LVM snapshot(s) size (lvcreate --size option).
+
+=back
+
+B<linux_lvm_snapshotname  rsnapshot>
+
+=over 4
+
+Name to be used when creating the LVM logical volume snapshot(s) (lvcreate --name option).
+
+=back
+
+B<linux_lvm_vgpath		/dev>
+
+=over 4
+
+Path to the LVM Volume Groups.
+
+=back
+
+B<linux_lvm_mountpath		/mnt/lvm-snapshot>
+
+=over 4
+
+Mount point to use to temporarily mount the snapshot(s).
+
+=back
+
+B<backup>  /etc/                       localhost/
+
+B<backup>  root@example.com:/etc/      example.com/
+
+B<backup>  rsync://example.com/path2/  example.com/
+
+B<backup>  /var/                       localhost/      one_fs=1
+
+B<backup>  lvm://vg0/home/path2/       lvm-vg0/
+
+B<backup_script>   /usr/local/bin/backup_pgsql.sh    pgsql_backup/
+
+=over 4
+
+Examples:
+
+B<backup   /etc/        localhost/>
+
+=over 4
+
+Backs up /etc/ to <snapshot_root>/<retain>.0/localhost/etc/ using rsync on
+the local filesystem
+
+=back
+
+B<backup   /usr/local/  localhost/>
+
+=over 4
+
+Backs up /usr/local/ to <snapshot_root>/<retain>.0/localhost/usr/local/
+using rsync on the local filesystem
+
+=back
+
+B<backup   root@example.com:/etc/       example.com/>
+
+=over 4
+
+Backs up root@example.com:/etc/ to <snapshot_root>/<retain>.0/example.com/etc/
+using rsync over ssh
+
+=back
+
+B<backup   example.com:/etc/       example.com/>
+
+=over 4
+
+Same thing but let ssh choose the remote username (as specified in
+~/.ssh/config, otherwise the same as the local username)
+
+=back
+
+B<backup   root@example.com:/usr/local/ example.com/>
+
+=over 4
+
+Backs up root@example.com:/usr/local/ to
+<snapshot_root>/<retain>.0/example.com/usr/local/ using rsync over ssh
+
+=back
+
+B<backup   rsync://example.com/pub/      example.com/pub/>
+
+=over 4
+
+Backs up rsync://example.com/pub/ to <snapshot_root>/<retain>.0/example.com/pub/
+using an anonymous rsync server. Please note that unlike backing up local paths
+and using rsync over ssh, rsync servers have "modules", which are top level
+directories that are exported. Therefore, the module should also be specified in
+the destination path, as shown in the example above (the pub/ directory at the
+end).
+
+=back
+
+B<backup   /var/     localhost/   one_fs=1>
+
+=over 4
+
+This is the same as the other examples, but notice the fourth column.
+This is how you specify per-backup-point options to over-ride global
+settings.  This extra parameter can take several options, separated
+by B<commas>.
+
+It is most useful when specifying per-backup rsync excludes thus:
+
+B<backup  root@somehost:/  somehost   +rsync_long_args=--exclude=/var/spool/>
+
+Note the + sign.  That tells rsnapshot to I<add> to the list of arguments
+to pass to rsync instead of replacing the list.
+
+=back
+
+B<backup  lvm://vg0/home/path2/       lvm-vg0/>
+
+=over 4
+
+Backs up the LVM logical volume called home, of volume group vg0, to
+<snapshot_root>/<retain>.0/lvm-vg0/. Will create, mount, backup, unmount and remove an LVM
+snapshot for each lvm:// entry.
+
+=back
+
+
+B<backup_script      /usr/local/bin/backup_database.sh   db_backup/>
+
+=over 4
+
+In this example, we specify a script or program to run. This script should simply
+create files and/or directories in its current working directory. rsnapshot will
+then take that output and move it into the directory specified in the third column.
+
+Please note that whatever is in the destination directory will be completely
+deleted and recreated. For this reason, rsnapshot prevents you from specifying
+a destination directory for a backup_script that will clobber other backups.
+
+So in this example, say the backup_database.sh script simply runs a command like:
+
+=over 4
+
+#!/bin/sh
+
+mysqldump -uusername mydatabase > mydatabase.sql
+
+chmod u=r,go= mydatabase.sql	# r-------- (0400)
+
+=back
+
+rsnapshot will take the generated "mydatabase.sql" file and move it into the
+<snapshot_root>/<retain>.0/db_backup/ directory. On subsequent runs,
+rsnapshot checks the differences between the files created against the
+previous files. If the backup script generates the same output on the next
+run, the files will be hard linked against the previous ones, and no
+additional disk space will be taken up.
+
+=back
+
+B<backup_exec      ssh root@1.2.3.4 "du -sh /.offsite_backup"                     optional/>
+B<backup_exec      rsync -az /.snapshots/daily.0 root@1.2.3.4:/.offsite_backup/   required/>
+B<backup_exec      /bin/true/>
+
+=over 4
+
+backup_exec simply runs the command listed. The second argument is not
+required and defaults to a value of 'optional'. It specifies the importance
+that the command return 0. Valid values are 'optional' and 'required'. If the
+command is specified as optional, a non-zero exit status from the command will
+result in a warning message being output. If the command is specified as
+'required', a non-zero exit status from the command will result in an error
+message being output and rsnapshot itself will exit with a non-zero exit
+status.
+
+=back
+
+=back
+
+Remember that tabs must separate all elements, and that
+there must be a trailing slash on the end of every directory.
+
+A hash mark (#) on the beginning of a line is treated
+as a comment.
+
+Putting it all together (an example file):
+
+=over 4
+
+    # THIS IS A COMMENT, REMEMBER TABS MUST SEPARATE ALL ELEMENTS
+
+    config_version  1.2
+
+    snapshot_root   /.snapshots/
+
+    cmd_rsync           /usr/bin/rsync
+    cmd_ssh             /usr/bin/ssh
+    #cmd_cp             /bin/cp
+    cmd_rm              /bin/rm
+    cmd_logger          /usr/bin/logger
+    cmd_du              /usr/bin/du
+
+    linux_lvm_cmd_lvcreate        /sbin/lvcreate
+    linux_lvm_cmd_lvremove        /sbin/lvremove
+    linux_lvm_cmd_mount           /bin/mount
+    linux_lvm_cmd_umount          /bin/umount
+
+    linux_lvm_snapshotsize    2G
+    linux_lvm_snapshotname    rsnapshot
+    linux_lvm_vgpath          /dev
+    linux_lvm_mountpath       /mnt/lvm-snapshot
+
+    retain              alpha  6
+    retain              beta   7
+    retain              gamma  7
+    retain              delta 3
+
+    backup              /etc/                     localhost/
+    backup              /home/                    localhost/
+    backup_script       /usr/local/bin/backup_mysql.sh  mysql_backup/
+
+    backup              root@foo.com:/etc/        foo.com/
+    backup              root@foo.com:/home/       foo.com/
+    backup              root@mail.foo.com:/home/  mail.foo.com/
+    backup              rsync://example.com/pub/  example.com/pub/
+    backup              lvm://vg0/xen-home/       lvm-vg0/xen-home/
+    backup_exec         echo "backup finished!"
+
+=back
+
+=back
+
+=head1 USAGE
+
+B<rsnapshot> can be used by any user, but for system-wide backups
+you will probably want to run it as root.
+
+Since backups usually get neglected if human intervention is
+required, the preferred way is to run it from cron.
+
+When you are first setting up your backups, you will probably
+also want to run it from the command line once or twice to get
+a feel for what it's doing.
+
+Here is an example crontab entry, assuming that backup levels B<alpha>,
+B<beta>, B<gamma> and B<delta> have been defined in B</etc/rsnapshot.conf>
+
+=over 4
+
+B<0 */4 * * *         /usr/local/bin/rsnapshot alpha>
+
+B<50 23 * * *         /usr/local/bin/rsnapshot beta>
+
+B<40 23 * * 6         /usr/local/bin/rsnapshot gamma>
+
+B<30 23 1 * *         /usr/local/bin/rsnapshot delta>
+
+=back
+
+This example will do the following:
+
+=over 4
+
+6 alpha backups a day (once every 4 hours, at 0,4,8,12,16,20)
+
+1 beta backup every day, at 11:50PM
+
+1 gamma backup every week, at 11:40PM, on Saturdays (6th day of week)
+
+1 delta backup every month, at 11:30PM on the 1st day of the month
+
+=back
+
+It is usually a good idea to schedule the larger backup levels to run a bit before the
+lower ones. For example, in the crontab above, notice that "beta" runs 10 minutes
+before "alpha".  The main reason for this is that the beta rotate will
+pull out the oldest alpha and make that the youngest beta (which means
+that the next alpha rotate will not need to delete the oldest alpha),
+which is more efficient.  A secondary reason is that it is harder to
+predict how long the lowest backup level will take, since it needs to actually
+do an rsync of the source as well as the rotate that all backups do.
+
+If rsnapshot takes longer than 10 minutes to do the "beta" rotate
+(which usually includes deleting the oldest beta snapshot), then you
+should increase the time between the backup levels.
+Otherwise (assuming you have set the B<lockfile> parameter, as is recommended)
+your alpha snapshot will fail sometimes because the beta still has the lock.
+
+Remember that these are just the times that the program runs.
+To set the number of backups stored, set the B<retain> numbers in
+B</etc/rsnapshot.conf>
+
+To check the disk space used by rsnapshot, you can call it with the "du" argument.
+
+For example:
+
+=over 4
+
+B<rsnapshot du>
+
+=back
+
+This will show you exactly how much disk space is taken up in the snapshot root. This
+feature requires the UNIX B<du> command to be installed on your system, for it to
+support the "-csh" command line arguments, and to be in your path. You can also
+override your path settings and the flags passed to du using the cmd_du and du_args
+parameters.
+
+It is also possible to pass a relative file path as a second argument, to get a report
+on a particular file or subdirectory.
+
+=over 4
+
+B<rsnapshot du localhost/home/>
+
+=back
+
+The GNU version of "du" is preferred. The BSD version works well also, but does
+not support the -h flag (use -k instead, to see the totals in kilobytes). Other
+versions of "du", such as Solaris, may not work at all.
+
+To check the differences between two directories, call rsnapshot with the "diff"
+argument, followed by two backup levels or directory paths.
+
+For example:
+
+=over 4
+
+B<rsnapshot diff beta.0 beta.1>
+
+B<rsnapshot diff beta.0/localhost/etc beta.1/localhost/etc>
+
+B<rsnapshot diff /.snapshots/beta.0 /.snapshots/beta.1>
+
+=back
+
+This will call the rsnapshot-diff program, which will scan both directories
+looking for differences (based on hard links).
+
+B<rsnapshot sync>
+
+=over 4
+
+When B<sync_first> is enabled, rsnapshot must first be called with the B<sync>
+argument, followed by the other usual cron entries. The sync should happen as
+the lowest, most frequent backup level, and right before. For example:
+
+=over 4
+
+B<0 */4 * * *         /usr/local/bin/rsnapshot sync && /usr/local/bin/rsnapshot alpha>
+
+B<50 23 * * *         /usr/local/bin/rsnapshot beta>
+
+B<40 23 1,8,15,22 * * /usr/local/bin/rsnapshot gamma>
+
+B<30 23 1 * *         /usr/local/bin/rsnapshot delta>
+
+=back
+
+The sync operation simply runs rsync and all backup scripts. In this scenario, all
+calls simply rotate directories, even the lowest backup level.
+
+=back
+
+B<rsnapshot sync [dest]>
+
+=over 4
+
+When B<sync_first> is enabled, all sync behaviour happens during an additional
+sync step (see above). When using the sync argument, it is also possible to specify
+a backup point destination as an optional parameter. If this is done, only backup
+points sharing that destination path will be synced.
+
+For example, let's say that example.com is a destination path shared by one or more
+of your backup points.
+
+=over 4
+
+rsnapshot sync example.com
+
+=back
+
+This command will only sync the files that normally get backed up into example.com.
+It will NOT get any other backup points with slightly different values (like
+example.com/etc/, for example). In order to sync example.com/etc, you would need to
+run rsnapshot again, using example.com/etc as the optional parameter.
+
+=back
+
+B<rsnapshot configtest>
+
+=over 4
+
+Do a quick sanity check to make sure everything is ready to go.
+
+=back
+
+=head1 EXIT VALUES
+
+=over 4
+
+B<0>  All operations completed successfully
+
+B<1>  A fatal error occurred
+
+B<2>  Some warnings occurred, but the backup still finished
+
+=back
+
+=head1 FILES
+
+/etc/rsnapshot.conf
+
+=head1 SEE ALSO
+
+rsync(1), ssh(1), logger(1), sshd(1), ssh-keygen(1), perl(1), cp(1), du(1), crontab(1)
+
+=head1 DIAGNOSTICS
+
+Use the B<-t> flag to see what commands would have been executed. This will show
+you the commands rsnapshot would try to run. There are a few minor differences
+(for example, not showing an attempt to remove the lockfile because it wasn't
+really created in the test), but should give you a very good idea what will happen.
+
+Using the B<-v>, B<-V>, and B<-D> flags will print increasingly more information
+to STDOUT.
+
+Make sure you don't have spaces in the config file that you think are actually tabs.
+
+Much other weird behavior can probably be attributed to plain old file system
+permissions and ssh authentication issues.
+
+=head1 BUGS
+
+Please report bugs (and other comments) to the rsnapshot-discuss mailing list:
+
+B<http://lists.sourceforge.net/lists/listinfo/rsnapshot-discuss>
+
+=head1 NOTES
+
+Make sure your /etc/rsnapshot.conf file has all elements separated by tabs.
+See /etc/rsnapshot.conf.default for a working example file.
+
+Make sure you put a trailing slash on the end of all directory references.
+If you don't, you may have extra directories created in your snapshots.
+For more information on how the trailing slash is handled, see the
+B<rsync(1)> manpage.
+
+Make sure to make the snapshot directory chmod 700 and owned by root
+(assuming backups are made by the root user). If the snapshot directory
+is readable by other users, they will be able to modify the snapshots
+containing their files, thus destroying the integrity of the snapshots.
+
+If you would like regular users to be able to restore their own backups,
+there are a number of ways this can be accomplished. One such scenario
+would be:
+
+Set B<snapshot_root> to B</.private/.snapshots> in B</etc/rsnapshot.conf>
+
+Set the file permissions on these directories as follows:
+
+=over 4
+
+drwx------    /.private
+
+drwxr-xr-x    /.private/.snapshots
+
+=back
+
+Export the /.private/.snapshots directory over read-only NFS, a read-only
+Samba share, etc.
+
+See the rsnapshot HOWTO for more information on making backups
+accessible to non-privileged users.
+
+For ssh to work unattended through cron, you will probably want to use
+public key logins. Create an ssh key with no passphrase for root, and
+install the public key on each machine you want to backup. If you are
+backing up system files from remote machines, this probably means
+unattended root logins. Another possibility is to create a second user
+on the machine just for backups. Give the user a different name such
+as "rsnapshot", but keep the UID and GID set to 0, to give root
+privileges. However, make logins more restrictive, either through ssh
+configuration, or using an alternate shell.
+
+BE CAREFUL! If the private key is obtained by an attacker, they will
+have free run of all the systems involved. If you are unclear on how
+to do this, see B<ssh(1)>, B<sshd(1)>, and B<ssh-keygen(1)>.
+
+Backup scripts are run as the same user that rsnapshot is running as.
+Typically this is root. Make sure that all of your backup scripts are
+only writable by root, and that they don't call any other programs
+that aren't owned by root. If you fail to do this, anyone who can
+write to the backup script or any program it calls can fully take
+over the machine. Of course, this is not a situation unique to
+rsnapshot.
+
+By default, rsync transfers are done using the --numeric-ids option.
+This means that user names and group names are ignored during transfers,
+but the UID/GID information is kept intact. The assumption is that the
+backups will be restored in the same environment they came from. Without
+this option, restoring backups for multiple heterogeneous servers would
+be unmanageable. If you are archiving snapshots with GNU tar, you may
+want to use the --numeric-owner parameter. Also, keep a copy of the
+archived system's /etc/passwd and /etc/group files handy for the UID/GID
+to name mapping.
+
+If you remove backup points in the config file, the previously archived
+files under those points will permanently stay in the snapshots directory
+unless you remove the files yourself. If you want to conserve disk space,
+you will need to go into the <snapshot_root> directory and manually
+remove the files from the smallest backup level's ".0" directory.
+
+For example, if you were previously backing up /home/ with a destination
+of localhost/, and alpha is your smallest backup level, you would need to do
+the following to reclaim that disk space:
+
+=over 4
+
+rm -rf <snapshot_root>/alpha.0/localhost/home/
+
+=back
+
+Please note that the other snapshots previously made of /home/ will still
+be using that disk space, but since the files are flushed out of alpha.0/,
+they will no longer be copied to the subsequent directories, and will thus
+be removed in due time as the rotations happen.
+
+=head1 AUTHORS
+
+Mike Rubel - B<http://www.mikerubel.org/computers/rsync_snapshots/>
+
+=over 4
+
+=item -
+Created the original shell scripts on which this project is based
+
+=back
+
+Nathan Rosenquist (B<nathan@rsnapshot.org>)
+
+=over 4
+
+=item -
+Primary author and original maintainer of rsnapshot.
+
+=back
+
+David Cantrell (B<david@cantrell.org.uk>)
+
+=over 4
+
+=item -
+Previous maintainer of rsnapshot
+
+=item -
+Wrote the rsnapshot-diff utility
+
+=item -
+Improved how use_lazy_deletes work so slow deletes don't screw up the next
+backup at that backup level.
+
+=back
+
+David Keegel <djk@cybersource.com.au>
+
+=over 4
+
+=item -
+Previous rsnapshot maintainer
+
+=item -
+Fixed race condition in lock file creation, improved error reporting
+
+=item -
+Allowed remote ssh directory paths starting with "~/" as well as "/"
+
+=item -
+Fixed a number of other bugs and buglets
+
+=back
+
+Benedikt Heine <benedikt@heine.rocks>
+
+=over 4
+
+=item -
+Current rsnapshot maintainer
+
+=back
+
+Carl Wilhelm Soderstrom B<(chrome@real-time.com)>
+
+=over 4
+
+=item -
+Created the RPM .spec file which allowed the RPM package to be built, among
+other things.
+
+=back
+
+Ted Zlatanov (B<tzz@lifelogs.com>)
+
+=over 4
+
+=item -
+Added the one_fs feature, autoconf support, good advice, and much more.
+
+=back
+
+Ralf van Dooren (B<r.vdooren@snow.nl>)
+
+=over 4
+
+=item -
+Added and maintains the rsnapshot entry in the FreeBSD ports tree.
+
+=back
+
+SlapAyoda
+
+=over 4
+
+=item -
+Provided access to his computer museum for software testing.
+
+=back
+
+Carl Boe (B<boe@demog.berkeley.edu>)
+
+=over 4
+
+=item -
+Found several subtle bugs and provided fixes for them.
+
+=back
+
+Shane Leibling (B<shane@cryptio.net>)
+
+=over 4
+
+=item -
+Fixed a compatibility bug in utils/backup_smb_share.sh
+
+=back
+
+Christoph Wegscheider (B<christoph.wegscheider@wegi.net>)
+
+=over 4
+
+=item -
+Added (and previously maintained) the Debian rsnapshot package.
+
+=back
+
+Bharat Mediratta (B<bharat@menalto.com>)
+
+=over 4
+
+=item -
+Improved the exclusion rules to avoid backing up the snapshot root (among
+other things).
+
+=back
+
+Peter Palfrader (B<weasel@debian.org>)
+
+=over 4
+
+=item -
+Enhanced error reporting to include command line options.
+
+=back
+
+Nicolas Kaiser (B<nikai@nikai.net>)
+
+=over 4
+
+=item -
+Fixed typos in program and man page
+
+=back
+
+Chris Petersen - (B<http://www.forevermore.net/>)
+
+=over 4
+
+Added cwrsync permanent-share support
+
+=back
+
+Robert Jackson (B<RobertJ@promedicalinc.com>)
+
+=over 4
+
+Added use_lazy_deletes feature
+
+=back
+
+Justin Grote (B<justin@grote.name>)
+
+=over 4
+
+Improved rsync error reporting code
+
+=back
+
+Anthony Ettinger (B<apwebdesign@yahoo.com>)
+
+=over 4
+
+Wrote the utils/mysqlbackup.pl script
+
+=back
+
+Sherman Boyd
+
+=over 4
+
+Wrote utils/random_file_verify.sh script
+
+=back
+
+William Bear (B<bear@umn.edu>)
+
+=over 4
+
+Wrote the utils/rsnapreport.pl script (pretty summary of rsync stats)
+
+=back
+
+Eric Anderson (B<anderson@centtech.com>)
+
+=over 4
+
+Improvements to utils/rsnapreport.pl.
+
+=back
+
+Alan Batie (B<alan@batie.org>)
+
+=over 4
+
+Bug fixes for include_conf
+
+=back
+
+Dieter Bloms (B<dieter@bloms.de>)
+
+=over 4
+
+Multi-line configuration options
+
+=back
+
+Henning Moll (B<newsScott@gmx.de>)
+
+=over 4
+
+stop_on_stale_lockfile
+
+=back
+
+Ben Low (B<ben@bdlow.net>)
+
+=over 4
+
+Linux LVM snapshot support
+
+=back
+
+=head1 COPYRIGHT
+
+Copyright (C) 2003-2005 Nathan Rosenquist
+
+Portions Copyright (C) 2002-2007 Mike Rubel, Carl Wilhelm Soderstrom,
+Ted Zlatanov, Carl Boe, Shane Liebling, Bharat Mediratta, Peter Palfrader,
+Nicolas Kaiser, David Cantrell, Chris Petersen, Robert Jackson, Justin Grote,
+David Keegel, Alan Batie, Dieter Bloms, Henning Moll, Ben Low, Anthony
+Ettinger
+
+This man page is distributed under the same license as rsnapshot:
+the GPL (see below).
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+51 Franklin Street, Fifth Floor, Boston, MA  02110-1301 USA
+
+=cut
+
+# more emacs-appeasement
+######################################################################
+### Local Variables:
+### tab-width: 4
+### End:
