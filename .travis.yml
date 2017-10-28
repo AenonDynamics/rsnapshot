@@ -16,8 +16,8 @@ install:
   # add nodejs binaries to path - this has to be done here!
   - export PATH=$PWD/node-v8.8.1-linux-x64/bin:$PATH
   # show version
-  - echo "Node.js Version: $(node -v)"
-  - echo "NPM Version: $(npm -v)"
+  - echo "Node.js $(node -v)"
+  - echo "NPM $(npm -v)"
   # install node dependencies
   - npm install
 
