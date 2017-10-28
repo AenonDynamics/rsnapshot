@@ -15,18 +15,14 @@ install:
   - tar -xzf /tmp/nodejs.tgz
   # add nodejs binaries to path - this has to be done here!
   - export PATH=$PWD/node-v8.8.1-linux-x64/bin:$PATH
-  # show version
-  - echo "Node.js $(node -v)"
-  - echo "NPM $(npm -v)"
+  # show node version
+  - node -v
+  - npm -v
   # install node dependencies
   - npm install
 
 script:
   # syntax check
   - perl -Mstrict -Mdiagnostics -cw rsnapshot
-  # show node version
-  - node -v
-  - npm -v
-  - echo $PATH
   # run javascript based tests
   - npm test
