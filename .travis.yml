@@ -10,10 +10,10 @@ perl:
 # install nodejs into home folder
 install: 
   - "test/install-nodejs.sh"
-  - "npm install"
+  - npm install
 
 script:
   # syntax check
   - perl -Mstrict -Mdiagnostics -cw rsnapshot
   # run javascript based tests
-  - "npm test"
+  - npm test
