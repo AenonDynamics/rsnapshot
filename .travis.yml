@@ -7,8 +7,13 @@ perl:
   - "5.14"
 
 # skip cpanm dependency management
-install: true
+# install nodejs into home folder
+install: 
+  - "test/install-nodejs.sh"
+  - "npm install"
 
 script:
   # syntax check
   - perl -Mstrict -Mdiagnostics -cw rsnapshot
+  # run javascript based tests
+  - "npm test"

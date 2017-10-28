@@ -2,6 +2,6 @@
 .idea/*
 .project
 .credentials*
-PublicHtml/*
+node_modules*
 .tmp*
 bats-core*

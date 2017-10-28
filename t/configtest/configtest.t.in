@@ -1,8 +1,0 @@
-#!@PERL@
-
-use strict;
-use Test::More tests => 1;
-use SysWrap;
-
-# check for basic configtest
-ok(0 == rsnapshot("-c @TEST@/configtest/conf/configtest.conf configtest"));

@@ -1,0 +1,21 @@
+{
+  "name": "rsnapshot-ng-testsuite",
+  "private": true,
+  "version": "1.5.0",
+  "bugs": "https://github.com/AenonDynamics/rsnapshot-ng/issues",
+  "repository": "AenonDynamics/rsnapshot-ng",
+  "description": "Javascript based testsuite for rsnapshot-ng",
+  "preferGlobal": false,
+  "engines": {
+    "node": ">=7.6"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "async-magic": "^1.3.0",
+    "fs-magic": "^2.1.1",
+    "mocha": "^3.4.2"
+  },
+  "scripts": {
+    "test": "mocha test/*.test.js"
+  }
+}
