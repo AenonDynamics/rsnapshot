@@ -6,7 +6,8 @@ CHANGELOG
 * Project Cleanup (Removed outdated utils, build tools/makefile)
 * Changed: Any kind of whitespaces (spaces, tabs) are allowed as config delimiter
 * Changed: `config_version` **1.3** required for rsnapshot-ng
-* Changed Documentation to Markdown
+* Changed: Documentation to Markdown
+* Changed: Use **4 spaces** as code indentation
 * Replaced build variables `@VALUE@` with static values
 * Renamed rsnapshot binary to `rsnapshot`
 * Renamed default config file to `rsnapshot.default.conf`

@@ -1,19 +1,22 @@
+Authors
+========================================================================
+
+The following authors contributed code to the project
+
+rsnapshot-ng
+------------------------------------------------------------------------
+
 **Andi Dittrich** - https://andidittrich.de
-* Created the **rsnapshot-ng** fork
+* Created the **rsnapshot-ng** fork https://github.com/AenonDynamics/rsnapshot-ng
 * current maintainer of rsnapshot-ng (as of 2017)
 
-**Mike Rubel** - http://www.mikerubel.org/computers/rsync_snapshots/
-* Created the original shell scripts on which this project is based
+rsnapshot
+------------------------------------------------------------------------
 
-**Nathan Rosenquist**
-* Primary author and ex-maintainer of rsnapshot (until 2005).
+### Maintainers ###
 
 **Benedikt Heine** <bebe@bebehei.de>
-* current maintainer of rsnapshot (2015-2017)
-
-**David Cantrell** <david@cantrell.org.uk>
-* ex-maintainer of rsnapshot (2005-2007)
-* Wrote the rsnapshot-diff utility
+* current maintainer of rsnapshot (2015-2017) https://github.com/rsnapshot/rsnapshot
 
 **David Keegel** <djk@cybersource.com.au>
 * ex-maintainer of rsnapshot (2008-2015)
@@ -21,6 +24,15 @@
 * Fixed race condition in lock file creation, improved error reporting
 * Fixed a number of other bugs and buglets
 * Release management for rsnapshot 1.2.9, 1.3.0
+
+**David Cantrell** <david@cantrell.org.uk>
+* ex-maintainer of rsnapshot (2005-2007)
+* Wrote the rsnapshot-diff utility
+
+**Nathan Rosenquist**
+* Primary author and ex-maintainer of rsnapshot (until 2005).
+
+### Contributors ###
 
 **Carl Wilhelm Soderstrom** <chrome@real-time.com>
 * Created the RPM .spec file which allowed the RPM package to be built, among other things.
@@ -94,3 +106,9 @@
 
 **Imran Chaudhry** <ichaudhry@gmail.com>
 * Added -H to rsnapshot-diff
+
+rsync_snapshots
+------------------------------------------------------------------------
+
+**Mike Rubel** - http://www.mikerubel.org/computers/rsync_snapshots/
+* Created the original shell scripts on which this project is based
