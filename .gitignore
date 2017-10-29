@@ -5,3 +5,4 @@
 node_modules*
 .tmp*
 bats-core*
+assets/data*

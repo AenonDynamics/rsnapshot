@@ -21,6 +21,13 @@ install:
   # install node dependencies
   - npm install
 
+# testdata
+before_script:
+  # generate random testdata (not in repository (50M filesize)) /tmp/data
+  - node assets/testdata-generator.js
+  # create snapshot dir
+  - mkdir /tmp/snapshots
+
 script:
   # syntax check
   - perl -Mstrict -Mdiagnostics -cw rsnapshot
