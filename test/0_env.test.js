@@ -29,4 +29,12 @@ describe('environment', function(){
         return _fs.stat(_lib.bin.du);
     });
 
+    it('should pass - snapshot directory available', function(){
+        return _fs.isDirectory(_lib.path.snapshotRoot).then(exists => _assert.equal(exists, true))
+    });
+
+    it('should pass - data directory available', function(){
+        return _fs.isDirectory(_lib.path.data).then(exists => _assert.equal(exists, true))
+    });
+
 });
