@@ -5,6 +5,7 @@ CHANGELOG
 
 * Project Cleanup (Removed outdated utils, build tools/makefile)
 * Changed: Any kind of whitespaces (spaces, tabs) are allowed as config delimiter
+* Added: Javascript/Node.js based testcases
 * Changed: `config_version` **1.3** required for rsnapshot-ng
 * Changed: Documentation to Markdown
 * Changed: Use **4 spaces** as code indentation
@@ -15,6 +16,7 @@ CHANGELOG
 * Changed: New TravisCI configuration
 * Added: Perl Syntax Check to CI tests
 * Changed: Perl **v5.14** is required (TravisCI does not provide older versions - therefore we cannot test them!)
+* Removed: Perl testcases
 
 ## 1.4.2 ##
 

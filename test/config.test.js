@@ -8,10 +8,10 @@ describe('configtest', function(){
     it('should pass - valid, minimal config', function(){
         return _lib.rsnapshotDynamicConfig([
             'config_version 1.3',
-            _lib.cmd.cp,
-            _lib.cmd.rm,
-            _lib.cmd.rsync,
-            _lib.conf.snapshotRoot,
+            `cmd_cp ${_lib.bin.cp}`,
+            `cmd_rm ${_lib.bin.rm}`,
+            `cmd_rsync ${_lib.bin.rsync}`,
+            `snapshot_root ${_lib.path.snapshotRoot}`,
             'retain alpha 6',
             'backup /etc/ local'
 
@@ -21,10 +21,10 @@ describe('configtest', function(){
     it('should fail - in case an old config version (1.2) is used', function(){
         return _lib.rsnapshotDynamicConfig([
             'config_version 1.2',
-            _lib.cmd.cp,
-            _lib.cmd.rm,
-            _lib.cmd.rsync,
-            _lib.conf.snapshotRoot,
+            `cmd_cp ${_lib.bin.cp}`,
+            `cmd_rm ${_lib.bin.rm}`,
+            `cmd_rsync ${_lib.bin.rsync}`,
+            `snapshot_root ${_lib.path.snapshotRoot}`,
             'retain alpha 6',
             'backup /etc/ local'
 
@@ -39,9 +39,9 @@ describe('configtest', function(){
     it('should fail - no_create_root has been set and the directory is missing', function(){
         return _lib.rsnapshotDynamicConfig([
             'config_version 1.3',
-            _lib.cmd.cp,
-            _lib.cmd.rm,
-            _lib.cmd.rsync,
+            `cmd_cp ${_lib.bin.cp}`,
+            `cmd_rm ${_lib.bin.rm}`,
+            `cmd_rsync ${_lib.bin.rsync}`,
             'snapshot_root /tmp/12345678',
             'no_create_root 1',
             'retain alpha 6',
@@ -58,9 +58,9 @@ describe('configtest', function(){
     it('should pass - no_create_root has been disable and the directory is missing', function(){
         return _lib.rsnapshotDynamicConfig([
             'config_version 1.3',
-            _lib.cmd.cp,
-            _lib.cmd.rm,
-            _lib.cmd.rsync,
+            `cmd_cp ${_lib.bin.cp}`,
+            `cmd_rm ${_lib.bin.rm}`,
+            `cmd_rsync ${_lib.bin.rsync}`,
             'snapshot_root /tmp/12345678',
             'no_create_root 0',
             'retain alpha 6',
@@ -88,10 +88,10 @@ describe('configtest', function(){
     it('should pass - tabs are used as config delimiter', function(){
         return _lib.rsnapshotDynamicConfig([
             'config_version\t1.3',
-            _lib.cmd.cp.replace(/\s/g, '\t'),
-            _lib.cmd.rm.replace(/\s/g, '\t'),
-            _lib.cmd.rsync.replace(/\s/g, '\t'),
-            _lib.conf.snapshotRoot.replace(/\s/g, '\t'),
+            `cmd_cp\t${_lib.bin.cp}`,
+            `cmd_rm\t${_lib.bin.rm}`,
+            `cmd_rsync\t${_lib.bin.rsync}`,
+            `snapshot_root\t${_lib.path.snapshotRoot}`,
             'retain\talpha\t6',
             'backup\t/etc/\tlocal'
 
@@ -101,10 +101,10 @@ describe('configtest', function(){
     it('should pass - multiple spaces are used as config delimiter', function(){
         return _lib.rsnapshotDynamicConfig([
             'config_version    1.3',
-            _lib.cmd.cp,
-            _lib.cmd.rm,
-            _lib.cmd.rsync,
-            _lib.conf.snapshotRoot,
+            `cmd_cp    ${_lib.bin.cp}`,
+            `cmd_rm                   ${_lib.bin.rm}`,
+            `cmd_rsync   ${_lib.bin.rsync}`,
+            `snapshot_root ${_lib.path.snapshotRoot}`,
             'retain alpha                          6',
             'backup              /etc/    local'
 
@@ -114,10 +114,10 @@ describe('configtest', function(){
     it('should pass - mixed spaces and tabs are used as config delimiter', function(){
         return _lib.rsnapshotDynamicConfig([
             'config_version \t\t   1.3',
-            _lib.cmd.cp,
-            _lib.cmd.rm,
-            _lib.cmd.rsync,
-            _lib.conf.snapshotRoot,
+            `cmd_cp\t   ${_lib.bin.cp}`,
+            `cmd_rm\t\t\t\t\t\t${_lib.bin.rm}`,
+            `cmd_rsync                        ${_lib.bin.rsync}`,
+            `snapshot_root ${_lib.path.snapshotRoot}`,
             'retain\talpha                          6',
             'backup   /etc/\tlocal',
             'backup\t/etc/\tlocalhost/\tone_fs=1,                       rsync_short_args=-urltvpog'

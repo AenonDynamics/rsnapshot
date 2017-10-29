@@ -37,17 +37,18 @@ module.exports = {
     rsnapshotDynamicConfig: rsnapshotDynamicConfig,
 
     // bin paths
-    cmd: {
-        cp:     'cmd_cp /bin/cp',
-        rm:     'cmd_rm /bin/rm',
-        rsync:  'cmd_rsync /usr/bin/rsync',
-        ssh:    'cmd_ssh /usr/bin/ssh',
-        logger: 'cmd_logger /usr/bin/logger',
-        du:     'cmd_du /usr/bin/du'
+    bin: {
+        cp:     '/bin/cp',
+        rm:     '/bin/rm',
+        rsync:  '/usr/bin/rsync',
+        ssh:    '/usr/bin/ssh',
+        logger: '/usr/bin/logger',
+        du:     '/usr/bin/du'
     },
 
     // conf
-    conf: {
-        snapshotRoot: 'snapshot_root /tmp/snapshots'
+    path: {
+        snapshotRoot: '/tmp/snapshots',
+        data: '/tmp/data'
     }
 };

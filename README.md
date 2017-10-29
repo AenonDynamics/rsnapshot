@@ -26,6 +26,7 @@ Enhancements
 * Config files can contain **spaces** and **tabs** as delimiters
 * Pure Perl script without build system - you can used it directly on any device
 * `rsync` output is shown on verbosity level >= 3
+* Javascript based testcases
 
 Documentation and References
 --------------------------------------------------------------
