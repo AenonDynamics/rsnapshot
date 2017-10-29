@@ -58,7 +58,9 @@ module.exports = {
         rsync:  '/usr/bin/rsync',
         ssh:    '/usr/bin/ssh',
         logger: '/usr/bin/logger',
-        du:     '/usr/bin/du'
+        du:     '/usr/bin/du',
+        true:   '/bin/true',
+        false:  '/bin/false'
     },
 
     // conf
