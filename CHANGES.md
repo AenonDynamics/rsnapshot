@@ -14,6 +14,7 @@ CHANGELOG
 * Renamed default config file to `rsnapshot.default.conf`
 * Changed: `rsync` command output is shown as from verbose level **3** instead of 4 (original)
 * Changed: New TravisCI configuration
+* Added: configtest command shows all recognized config lines as parseable text
 * Added: Perl Syntax Check to CI tests
 * Changed: Perl **v5.14** is required (TravisCI does not provide older versions - therefore we cannot test them!)
 * Removed: Perl testcases

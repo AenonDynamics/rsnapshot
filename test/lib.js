@@ -31,7 +31,7 @@ async function rsnapshotDynamicConfig(config, ...args){
     // run rsnapshot with tmp config
     const [stdout, stderr] = await rsnapshot('-c', _rsnapshotConfig, ...args);
 
-    return [stdout, stderr, b];
+    return [stdout, stderr, b.trim()];
 }
 
 // compare directoy contents based on external diff utility

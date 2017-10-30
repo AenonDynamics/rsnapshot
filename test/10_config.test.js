@@ -156,6 +156,43 @@ describe('configtest', function(){
             _assert.equal(config.length, 7);
         });
     });
+
+    it('should pass - validate configtest output', function(){
+        return _lib.rsnapshotDynamicConfig([
+            'config_version 1.3',
+            `cmd_cp ${_lib.bin.cp}`,
+            `cmd_rm ${_lib.bin.rm}`,
+            `cmd_rsync ${_lib.bin.rsync}`,
+            `cmd_ssh ${_lib.bin.ssh}`,
+            `cmd_du ${_lib.bin.du}`,
+            `cmd_logger ${_lib.bin.logger}`,
+            `snapshot_root ${_lib.path.snapshotRoot}`,
+            'retain alpha 6',
+            'retain beta 4',
+            'retain gamma 8',
+            'retain delta 20',
+            'backup /etc/ etc',
+            'backup /home/ homes',
+            'backup /srv/ srv +rsync_long_args=--no-relative',
+            'backup /etc/ localhost/ one_fs=1,                       rsync_short_args=-urltvpog'
+
+        ], 'configtest').then(function([stdout, stderr, conf]){
+            // parse configtest output
+            const config = _lib.parseConfigtest(stdout);
+            
+            // check num config elements
+            _assert.equal(config.length, 16);
+
+            // config object to txt
+            const txtConfig = config.map(entry => {
+                return entry.join(' ');
+            }).join('\n');
+
+            // compare configs
+            _assert.equal(txtConfig, conf);
+        });
+    });
+
     
 
 });
