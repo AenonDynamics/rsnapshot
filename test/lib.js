@@ -7,6 +7,41 @@ const _exec = _async.promisify(_childProcess.execFile, 'exec');
 const _rsnapshotBin = _path.join(__dirname, '../rsnapshot');
 const _rsnapshotConfig = _path.join('/tmp', 'rsnapshot.conf');
 
+// storage paths used by the testsuits
+const _paths = {
+    snapshotRoot: '/tmp/snapshots',
+    data: '/tmp/data',
+    origindata: '/tmp/origindata'
+};
+
+// binaries used by rsnapshot
+const _bins = {
+    cp:     '/bin/cp',
+    rm:     '/bin/rm',
+    rsync:  '/usr/bin/rsync',
+    ssh:    '/usr/bin/ssh',
+    logger: '/usr/bin/logger',
+    du:     '/usr/bin/du',
+    true:   '/bin/true',
+    false:  '/bin/false'
+};
+
+// prepare clean environment before each testsuite is running
+async function cleanEnvironment(){
+    // remove testdata dir and snapshots
+    if (!!(await _fs.isDirectory(_paths.data))){
+        await _exec(_bins.rm, ['-rf', _paths.data]);
+    }
+
+    if (!!(await _fs.isDirectory(_paths.snapshotRoot))){
+        await _exec(_bins.rm, ['-rf', _paths.snapshotRoot]);
+    }
+
+    // copy data
+    await _exec(_bins.cp, ['-R', _paths.origindata, _paths.data]);
+    await _fs.mkdir(_paths.snapshotRoot);
+}
+
 // rsnapshot execution wrapper
 // run perl interpreter with binary present in root dir and given args
 async function rsnapshot(...args){
@@ -74,22 +109,8 @@ module.exports = {
     rsnapshotDynamicConfig: rsnapshotDynamicConfig,
     compareDirectories: compareDirectories,
     parseConfigtest: parseConfigtest,
+    cleanEnvironment: cleanEnvironment,
 
-    // bin paths
-    bin: {
-        cp:     '/bin/cp',
-        rm:     '/bin/rm',
-        rsync:  '/usr/bin/rsync',
-        ssh:    '/usr/bin/ssh',
-        logger: '/usr/bin/logger',
-        du:     '/usr/bin/du',
-        true:   '/bin/true',
-        false:  '/bin/false'
-    },
-
-    // conf
-    path: {
-        snapshotRoot: '/tmp/snapshots',
-        data: '/tmp/data'
-    }
+    bin: _bins,
+    path: _paths
 };

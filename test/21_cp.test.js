@@ -4,6 +4,11 @@ const _assert = require('assert');
 
 describe('copy:gnu_cp/perl_cp', function(){
 
+    before(async function(){
+        // prepare environment
+        await _lib.cleanEnvironment();
+    });
+
     it('should pass - 1st snapshot using GNU cp', async function(){
         await _lib.rsnapshotDynamicConfig([
             'config_version 1.3',

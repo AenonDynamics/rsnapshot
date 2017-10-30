@@ -5,6 +5,11 @@ const _fs = require('fs-magic');
 
 describe('environment', function(){
 
+    before(async function(){
+        // prepare environment
+        await _lib.cleanEnvironment();
+    });
+
     it('should pass - <cp> available', function(){
         return _fs.stat(_lib.bin.cp);
     });
@@ -35,6 +40,12 @@ describe('environment', function(){
 
     it('should pass - data directory available', function(){
         return _fs.isDirectory(_lib.path.data).then(exists => _assert.equal(exists, true))
+    });
+
+    it('should pass - data directory equals origin data source', async function(){
+        // validate integrity
+        const equals = await _lib.compareDirectories(_lib.path.data, _lib.path.origindata);
+        _assert.equal(equals, true);
     });
 
 });

@@ -23,10 +23,8 @@ install:
 
 # testdata
 before_script:
-  # generate random testdata (not in repository (50M filesize)) /tmp/data
+  # generate random testdata (not in repository (50M filesize)) /tmp/origindata
   - node assets/testdata-generator.js
-  # create snapshot dir
-  - mkdir /tmp/snapshots
 
 script:
   # syntax check

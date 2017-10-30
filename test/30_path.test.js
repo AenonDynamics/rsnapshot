@@ -9,11 +9,15 @@ const _backupDirWhitespaces = '/tmp/my config with whitespaces';
 describe('path', function(){
 
     before(async function(){
-        if (!_fs.statx(_snapshotRootWhitespace)){
-            _fs.mkdir(_snapshotRootWhitespace);
+        // prepare environment
+        await _lib.cleanEnvironment();
+         
+        // prepare test paths
+        if (!(await _fs.statx(_snapshotRootWhitespace))){
+            await _fs.mkdir(_snapshotRootWhitespace);
         }
-        if (!_fs.statx(_backupDirWhitespaces)){
-            _fs.mkdir(_backupDirWhitespaces);
+        if (!(await _fs.statx(_backupDirWhitespaces))){
+            await _fs.mkdir(_backupDirWhitespaces);
         }
     });
 

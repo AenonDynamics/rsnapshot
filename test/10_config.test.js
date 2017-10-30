@@ -5,6 +5,11 @@ const _testfile = _path.join(__dirname, 'random.bin');
 
 describe('configtest', function(){
 
+    before(async function(){
+        // prepare environment
+        await _lib.cleanEnvironment();
+    });
+
     it('should pass - valid, minimal config', function(){
         return _lib.rsnapshotDynamicConfig([
             'config_version 1.3',
