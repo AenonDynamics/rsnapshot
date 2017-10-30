@@ -520,9 +520,18 @@ sub parse_config_file {
         if (is_blank($line)) { next; }
 
         # parse line
-        # any whitespace character is allowed as separator
+        # any whitespace character is allowed as separator. quoted sequences are handled as single argument
         # keyword value0 [value1, [value2]] 
-        my ($var, $value, $value2, $value3) = ($line =~ /^\s*([a-z_]+)\s+([^\s]+)(?:\s+([^\s]+))?(?:\s+([^\s]+.+?))?\s*$/);
+        # keyword "value0" "value1"
+        my ($var, $value, $value2, $value3) = ($line =~ /^\s*([a-z_]+)\s+("[^"]*"|[\S]+)(?:\s+("[^"]*"|[\S]+))?(?:\s+([^\s]+.+?))?\s*$/);
+
+        # strip quotes on values
+        if (defined($value)){
+            $value =~ s/^"|"$//g;
+        }
+        if (defined($value2)){
+            $value2 =~ s/^"|"$//g;
+        }
 
         # configtest ? show config
         if (1 == $do_configtest) {
