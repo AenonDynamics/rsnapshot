@@ -2,7 +2,7 @@ const _lib = require('./lib');
 const _path = require('path');
 const _assert = require('assert');
 
-describe('copy:gnu_cp/buildin', function(){
+describe('copy:gnu_cp/perl_cp', function(){
 
     it('should pass - 1st snapshot using GNU cp', async function(){
         await _lib.rsnapshotDynamicConfig([

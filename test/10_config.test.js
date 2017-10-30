@@ -125,4 +125,37 @@ describe('configtest', function(){
         ], 'configtest');
     });
 
+    it('should pass - multiple leading/trailing whitespaces', function(){
+        return _lib.rsnapshotDynamicConfig([
+            '\tconfig_version    1.3',
+            `cmd_cp    ${_lib.bin.cp}\t     \t  `,
+            `\t   cmd_rm                   ${_lib.bin.rm}`,
+            `   \tcmd_rsync   ${_lib.bin.rsync}`,
+            `     snapshot_root ${_lib.path.snapshotRoot}  `,
+            'retain alpha                          6\t',
+            'backup\t/etc/\tlocalhost/\tone_fs=1,                       rsync_short_args=-urltvpog       '
+
+        ], 'configtest');
+    });
+
+    it('should pass - parse configtest output', function(){
+        return _lib.rsnapshotDynamicConfig([
+            'config_version 1.3',
+            `cmd_cp ${_lib.bin.cp}`,
+            `cmd_rm ${_lib.bin.rm}`,
+            `cmd_rsync ${_lib.bin.rsync}`,
+            `snapshot_root ${_lib.path.snapshotRoot}`,
+            'retain alpha 6',
+            'backup /etc/ local'
+
+        ], 'configtest').then(function([stdout, stderr, conf]){
+            // parse configtest output
+            const config = _lib.parseConfigtest(stdout);
+
+            // check num config elements
+            _assert.equal(config.length, 7);
+        });
+    });
+    
+
 });

@@ -501,7 +501,6 @@ sub parse_config_file {
     # read it line by line
     @configs = <$CONFIG>;
     while (my $line = $configs[$file_line_num]) {
-        chomp($line);
 
         # count line numbers
         $file_line_num++;
@@ -523,30 +522,39 @@ sub parse_config_file {
         # parse line
         # any whitespace character is allowed as separator
         # keyword value0 [value1, [value2]] 
-        my ($var, $value, $value2, $value3) = ($line =~ /^([a-z_]+)\s+([^\s]+)(?:\s+([^\s]+))?(?:\s+(.+))?$/);
+        my ($var, $value, $value2, $value3) = ($line =~ /^\s*([a-z_]+)\s+([^\s]+)(?:\s+([^\s]+))?(?:\s+([^\s]+.+?))?\s*$/);
+
+        # configtest ? show config
+        if (1 == $do_configtest) {
+            if (defined($var)){
+                print "- $var";
+            }
+            if (defined($value)){
+                print " >>> $value";
+            }
+            if (defined($value2)){
+                print " >>> $value2";
+            }
+            if (defined($value3)){
+                print " >>> $value3";
+            }
+            print "\n";
+        }
 
         # warn about entries we don't understand, and immediately prevent the
         # program from running or parsing anything else
         if (!defined($var)) {
-            config_err($file_line_num, "$line - could not find keyword on this line");
+            config_err($file_line_num, "$line - could not find command on this line");
             next;
         }
-        if (!defined($value) && $var eq $line) {
-
-            # No tabs found in $line.
-            if ($line =~ /\s/) {
-
-                # User put spaces in config line instead of tabs.
-                config_err($file_line_num, "$line - missing tabs to separate words");
-                next;
-            }
-            else {
-
-                # User put only one word
-                config_err($file_line_num, "$line - could not find second word on this line");
-                next;
-            }
+        
+        # no command value given ?
+        if (!defined($value)) {
+            # User put only one word
+            config_err($file_line_num, "$line - could not find command-value on this line");
+            next;
         }
+
         foreach (grep { defined($_) && index($_, ' ') == 0 } ($value, $value2, $value3)) {
             print_warn("$line - extra space found between tab and $_");
         }

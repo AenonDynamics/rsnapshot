@@ -29,7 +29,9 @@ async function rsnapshotDynamicConfig(config, ...args){
     await _fs.writeFile(_rsnapshotConfig, b, 'utf8');
 
     // run rsnapshot with tmp config
-    return await rsnapshot('-c', _rsnapshotConfig, ...args);
+    const [stdout, stderr] = await rsnapshot('-c', _rsnapshotConfig, ...args);
+
+    return [stdout, stderr, b];
 }
 
 // compare directoy contents based on external diff utility
@@ -45,11 +47,33 @@ async function compareDirectories(dir1, dir2){
     }
 }
 
+// parse configtest output
+function parseConfigtest(data){
+    let matches;
+    const config = [];
+
+    // config delimiter >>>
+    const rule = /^- ([a-z_]+(?: >>> .+?)+)$/gm;
+
+    // parse config entries
+    while (match = rule.exec(data)){
+        // get args
+        const args = match[1].split(' >>> ');
+
+        // push to stack
+        config.push(args);
+    }
+
+    return config;
+}
+
 // expose functions
 module.exports = {
+    // utilities
     rsnapshot: rsnapshot,
     rsnapshotDynamicConfig: rsnapshotDynamicConfig,
     compareDirectories: compareDirectories,
+    parseConfigtest: parseConfigtest,
 
     // bin paths
     bin: {
