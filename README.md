@@ -26,7 +26,7 @@ Enhancements
 * Config files can contain **spaces** and **tabs** as delimiters
 * Pure Perl script without build system - you can used it directly on any device
 * `rsync` output is shown on verbosity level >= 3
-* Javascript based testcases
+* Advanced Javascript based testcases
 
 Documentation and References
 --------------------------------------------------------------
@@ -41,11 +41,19 @@ Some recommended tutorials/usage guides
 Config File Syntax
 --------------------------------------------------------------
 
-The config file syntax has changed compared to the classic rsnapshot files.
+**The config file syntax has changed compared to the classic rsnapshot files.**
 
 Now it's allowed to use any kind of whitespaces (**spaces** and **tabs**) as command/value delimiter. To identify the "new" version you have to set `config_version 1.3` (compatibility)
 
 Syntax: **keyword** `value0` [`value1` [ `value2`]]
+
+**Paths with Whitespaces**
+
+To use whitespaces within paths, just wrap the argument into **double-quotes**
+
+```conf
+backup "/etc/my dir with whitespaces" etcbackup/ +rsync_short_args=-z
+```
 
 Usage
 ------------------------------------------------------
@@ -121,34 +129,10 @@ or visit http://www.rsnapshot.org/.  The HowTo on the web site has a
 detailed overview of how to install and configure rsnapshot, and things
 like how to set it up so users can restore their own files.
 
-
-COMPATIBILITY NOTICES
---------------------------------------------------------------
-
- 1. Note that systems which use GNU cp version 5.9 or later will have problems
-    with rsnapshot versions up to and including 1.2.3, if `cmd_cp` is enabled
-    (and points at the later gnu cp).  This is no longer a problem since
-    rsnapshot 1.2.9, as it strips off trailing slashes when running cp.
-
- 2. If you have rsync version 2.5.7 or later, you may want to enable the
-    link_dest parameter in the rsnapshot.conf file.
-
-    If you are running Linux but do not have the problem above, you should
-    enable the `cmd_cp` parameter in rsnapshot.conf (especially if you do not
-    have link_dest enabled).
-
-    Be advised that currently `link_dest` doesn't do well with unavailable hosts.
-    Specifically, if a remote host is unavailable using `link_dest`, there will
-    be no latest backup of that machine, and a full re-sync will be required
-    when it becomes available. Using the other methods, the last good snapshot
-    will be preserved, preventing the need for a re-sync. We hope to streamline
-    this in the future.
-
 Authors
 --------------------------------------------------------
 
-Please see the [AUTHORS](AUTHORS,md) file for the complete list of contributors.
-
+Please see the [AUTHORS](AUTHORS.md) file for the complete list of contributors.
 
 License
 -------
