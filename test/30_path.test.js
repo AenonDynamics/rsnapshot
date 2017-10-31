@@ -31,7 +31,7 @@ describe('path', function(){
             'retain alpha 6',
             `backup "${_backupDirWhitespaces}" local`
 
-        ], 'configtest');
+        ], 'alpha');
     });
 
     it('should pass - valid, minimal config with whitespaces in backup source with additional arguments', function(){
@@ -44,7 +44,7 @@ describe('path', function(){
             'retain alpha 6',
             `backup "${_backupDirWhitespaces}" local +rsync_long_args=--no-relative`
 
-        ], 'configtest');
+        ], 'alpha');
     });
 
     it('should pass - valid, minimal config with whitespaces in snapshot root', function(){
@@ -55,9 +55,9 @@ describe('path', function(){
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root "${_snapshotRootWhitespace}"`,
             'retain alpha 6',
-            'backup "/etc" local'
+            `backup ${_lib.path.data} local`
 
-        ], 'configtest');
+        ], 'alpha');
     });
 
     it('should pass - valid, minimal config with whitespaces in snapshot root and backup source', function(){
@@ -70,7 +70,7 @@ describe('path', function(){
             'retain alpha 6',
             `backup "${_backupDirWhitespaces}" local`
 
-        ], 'configtest');
+        ], 'alpha');
     });
     
 

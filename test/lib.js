@@ -11,7 +11,8 @@ const _rsnapshotConfig = _path.join('/tmp', 'rsnapshot.conf');
 const _paths = {
     snapshotRoot: '/tmp/snapshots',
     data: '/tmp/data',
-    origindata: '/tmp/origindata'
+    origindata: '/tmp/origindata',
+    flags: '/tmp/flags'
 };
 
 // binaries used by rsnapshot
@@ -23,7 +24,8 @@ const _bins = {
     logger: '/usr/bin/logger',
     du:     '/usr/bin/du',
     true:   '/bin/true',
-    false:  '/bin/false'
+    false:  '/bin/false',
+    echo:   '/bin/echo'
 };
 
 // prepare clean environment before each testsuite is running
@@ -37,9 +39,17 @@ async function cleanEnvironment(){
         await _exec(_bins.rm, ['-rf', _paths.snapshotRoot]);
     }
 
+    // remove flag dir
+    if (!!(await _fs.isDirectory(_paths.flags))){
+        await _exec(_bins.rm, ['-rf', _paths.flags]);
+    }
+
     // copy data
     await _exec(_bins.cp, ['-R', _paths.origindata, _paths.data]);
+
+    // create dirs
     await _fs.mkdir(_paths.snapshotRoot);
+    await _fs.mkdir(_paths.flags);
 }
 
 // rsnapshot execution wrapper
@@ -102,6 +112,23 @@ function parseConfigtest(data){
     return config;
 }
 
+// file with content set within flag dir ?
+async function isFlagSet(name, value=null){
+    // file exists ?
+    const exists = await _fs.exists(_path.join(_paths.flags, name));
+
+    // no value comparision ? exit
+    if (!exists || value===null){
+        return exists;
+    }
+
+    // get value
+    const data = await _fs.readFile(_path.join(_paths.flags, name), 'utf8');
+
+    // compare
+    return (data.trim()===value.trim());
+}
+
 // expose functions
 module.exports = {
     // utilities
@@ -110,6 +137,7 @@ module.exports = {
     compareDirectories: compareDirectories,
     parseConfigtest: parseConfigtest,
     cleanEnvironment: cleanEnvironment,
+    isFlagSet: isFlagSet,
 
     bin: _bins,
     path: _paths
