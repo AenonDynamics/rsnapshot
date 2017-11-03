@@ -16,6 +16,6 @@
     "mocha": "^3.4.2"
   },
   "scripts": {
-    "test": "mocha test/*.test.js"
+    "test": "mocha test/*.test.js --timeout 10000"
   }
 }
