@@ -264,8 +264,8 @@ happens to be the default, so as you can see the config file
 reads::
 
 ```conf
-interval    hourly  6
-interval    daily   7
+retain    hourly  6
+retain    daily   7
 ```
 
 It also has some other entries, but you can either ignore them or
