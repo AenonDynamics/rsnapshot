@@ -17,7 +17,7 @@ describe('rsync', function(){
                 `cmd_cp ${_lib.bin.cp}`,
                 `cmd_rsync ${_lib.bin.false}`,
                 `snapshot_root ${_lib.path.snapshotRoot}`,
-                'retain alpha 6',
+                'retain alpha 20',
                 `backup ${_lib.path.data} local`
             ], 'alpha');
         
@@ -36,7 +36,7 @@ describe('rsync', function(){
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,
-            'retain alpha 6',
+            'retain alpha 20',
             `backup ${_lib.path.data} local`
         ], 'alpha');
 
@@ -51,7 +51,23 @@ describe('rsync', function(){
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,
-            'retain alpha 6',
+            'retain alpha 20',
+            `backup ${_lib.path.data} local`
+        ], 'alpha');
+
+        // validate integrity
+        const equals = await _lib.compareDirectories(_lib.path.data, _path.join(_lib.path.snapshotRoot, 'alpha.0/local', _lib.path.data));
+        _assert.equal(equals, true);
+    });
+
+    it('should pass - 3rd snapshot using rsync link-dest', async function(){
+        await _lib.rsnapshotDynamicConfig([
+            'config_version 2.0',
+            `cmd_cp ${_lib.bin.cp}`,
+            `cmd_rsync ${_lib.bin.rsync}`,
+            `snapshot_root ${_lib.path.snapshotRoot}`,
+            'link_dest 1',
+            'retain alpha 20',
             `backup ${_lib.path.data} local`
         ], 'alpha');
 
@@ -67,7 +83,7 @@ describe('rsync', function(){
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,
             'rsync_long_args "--delete --numeric-ids --no-relative --delete-excluded"',
-            'retain alpha 6',
+            'retain alpha 20',
             `backup ${_lib.path.data} local`,
         ], 'alpha');
 
@@ -82,7 +98,7 @@ describe('rsync', function(){
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,
-            'retain alpha 6',
+            'retain alpha 20',
             `backup ${_lib.path.data} local +rsync_long_args=--no-relative`,
         ], 'alpha');
 
@@ -98,7 +114,7 @@ describe('rsync', function(){
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,
             'rsync_short_args "-an"',
-            'retain alpha 6',
+            'retain alpha 20',
             `backup ${_lib.path.data} local`,
         ], 'alpha');
 
@@ -106,7 +122,7 @@ describe('rsync', function(){
         _assert.equal(await _fs.exists(_path.join(_lib.path.snapshotRoot, 'alpha.0/local', _lib.path.data)), false);
         
         // directory moved
-        _assert.equal(await _fs.isDirectory(_path.join(_lib.path.snapshotRoot, 'alpha.4/local', _lib.path.data)), true);
+        _assert.equal(await _fs.isDirectory(_path.join(_lib.path.snapshotRoot, 'alpha.5/local', _lib.path.data)), true);
     });
 
     it('should pass - using rsync-short-args (-n) inline', async function(){
@@ -115,7 +131,7 @@ describe('rsync', function(){
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,
-            'retain alpha 6',
+            'retain alpha 20',
             `backup ${_lib.path.data} local +rsync_short_args=-n`,
         ], 'alpha');
 
@@ -123,8 +139,7 @@ describe('rsync', function(){
         _assert.equal(await _fs.exists(_path.join(_lib.path.snapshotRoot, 'alpha.0/local', _lib.path.data)), false);
 
         // directory moved
-        _assert.equal(await _fs.isDirectory(_path.join(_lib.path.snapshotRoot, 'alpha.5/local', _lib.path.data)), true);
+        _assert.equal(await _fs.isDirectory(_path.join(_lib.path.snapshotRoot, 'alpha.6/local', _lib.path.data)), true);
     });
-
     
 });
