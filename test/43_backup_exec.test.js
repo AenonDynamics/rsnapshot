@@ -12,7 +12,7 @@ describe('backup_exec', function(){
 
     it('should pass - backup_exec with required flag set returns success', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -25,7 +25,7 @@ describe('backup_exec', function(){
 
     it('should pass - backup_exec with arguments', async function(){
         await _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -41,7 +41,7 @@ describe('backup_exec', function(){
 
     it('should pass - backup_exec without flag (default=optional) set returns success', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -54,7 +54,7 @@ describe('backup_exec', function(){
 
     it('should pass - backup_exec with optional flag set returns success', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -67,7 +67,7 @@ describe('backup_exec', function(){
 
     it('should fail - backup_exec with required flag set returns error', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -86,7 +86,7 @@ describe('backup_exec', function(){
 
     it('should pass - backup_exec without flag (default=optional) set returns error (warnings only; returncode=2)', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -105,7 +105,7 @@ describe('backup_exec', function(){
 
     it('should pass - backup_exec with optional flag set returns error (warnings only; returncode=2)', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -124,7 +124,7 @@ describe('backup_exec', function(){
 
     it('should pass - multiple backup_exec directives used, non of them throws an error (warnings only; returncode=2)', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,

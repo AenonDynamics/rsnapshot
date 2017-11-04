@@ -1,31 +1,38 @@
 CHANGELOG
 ==============================================
 
-## NG 1.5.0 ##
+RSNAPSHOT-NG
+-------------------------------------------------
+
+### 2.0.0 ###
 
 * Project Cleanup (Removed outdated utils, build tools/makefile)
+* Added: Enhanced Javascript/Node.js based testcases
+* Added: configtest command shows all recognized config lines as parseable text
+* Added: Perl Syntax Check to CI tests
 * Changed: Any kind of whitespaces (spaces, tabs) are allowed as config delimiter
-* Added: Javascript/Node.js based testcases
-* Changed: `config_version` **1.3** required for rsnapshot-ng
+* Changed: `config_version` **2.0** required for rsnapshot-ng
 * Changed: Documentation to Markdown
 * Changed: Use **4 spaces** as code indentation
+* Changed: `rsync` command output is shown as from verbose level **3** instead of 4 (original)
+* Changed: New TravisCI configuration
+* Changed: Perl **v5.14** is required (TravisCI does not provide older versions - therefore we cannot test them!)
 * Replaced build variables `@VALUE@` with static values
 * Renamed rsnapshot binary to `rsnapshot`
 * Renamed default config file to `rsnapshot.default.conf`
-* Changed: `rsync` command output is shown as from verbose level **3** instead of 4 (original)
-* Changed: New TravisCI configuration
-* Added: configtest command shows all recognized config lines as parseable text
-* Added: Perl Syntax Check to CI tests
-* Changed: Perl **v5.14** is required (TravisCI does not provide older versions - therefore we cannot test them!)
 * Removed: Perl testcases
 
-## 1.4.2 ##
+
+Legacy RSNAPSHOT
+-------------------------------------------------
+
+### 1.4.2 ###
 
 * Display warning, when the verbosity is set multiple times (e.g. on command-line and logfile at the same time)
 * Changed maintainership in all files.
 * Capture rsync's output right #102
 
-## 1.4.0 ## 
+### 1.4.0 ###
 
 * Tidy the code with perltidy
 * Fix --rsh command line option The --rsh option of rsync got errornously quoted (Debian Bug #743310)
@@ -51,7 +58,7 @@ CHANGELOG
 * Fix inaccurate omission of --link-dest in test-mode output
 * rsnapshot-diff: Add -s option to show size of each file. 
 
-## 1.3.1  (Aug 31 2008) ## 
+### 1.3.1  (Aug 31 2008) ###
 
 * Fix help message mixup in lines between -c and -t.
 * Add more specific error messages for not currently implemented potential  per backup point options, like cmd_preexec.
@@ -75,7 +82,7 @@ CHANGELOG
 * Include rsnapshot-diff.1 in rpm.
 * Fix bug with rsnapshot sync the first time (when .sync does not exist) trying to copy hourly.0 to .sync, even if hourly.0 doesn't exist. http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=413439 
 
-## 1.3.0  (Oct 21 2006) ## 
+### 1.3.0  (Oct 21 2006) ###
 
 * Add files rsnapreport.pl Upgrading_from_1.1 rsnapshot-HOWTO.en.html to rpm.
 * fix a bug with removing interval.delete (with use_lazy_deletes).
@@ -98,7 +105,7 @@ CHANGELOG
 * More examples (eg: timestamp backup_script) in rsnapshot.conf.default.in.
 * Change "Perhaps this is not GNU cp?" error message. 
 
-## 1.2.9  (May 18 2006) ## 
+### 1.2.9  (May 18 2006) ###
 
 * David Keegel <djk@cybersource.com.au> now responsible for release management
 * Added utils/rsnapreport.pl, written by William Bear.
@@ -152,24 +159,24 @@ CHANGELOG
 * Anthony Ettinger <apwebdesign@yahoo.com> wrote utils/mysqlbackup.pl
 * Sherman Boyd wrote utils/random_file_verify.sh
 
-## 1.2.3 (Aug ?? ??:?? 2005) ## 
+### 1.2.3 (Aug ?? ??:?? 2005) ###
 
 * Fixed a bug introduced in 1.2.2 when rsync is not using --relative
 * Fixed a bug where the snapshot_root could be included in backups if the root filesystem was being backed up and --relative was not set
 
-## 1.2.2 (Aug 20 18:07 2005) ## 
+### 1.2.2 (Aug 20 18:07 2005) ###
 
 * David Keegel <djk@cybersource.com.au> fixed a race condition in add_lockfile()
 * David Keegel <djk@cybersource.com.au> improved error reporting when config file isn't present
 * Provided a workaround for a bug in some ## versions of rsync which caused files to not be deleted properly when the --relative flag was set. ## 
 
-## 1.2.1 (Apr 09 15:10 2005) ## 
+### 1.2.1 (Apr 09 15:10 2005) ###
 
 * Fixed security bug when neither cmd_cp or link_dest are enabled
 * Disabled chown() call in copy_symlink()
 * Check for symlink before all chown() calls
 
-## 1.2.0 (Jan 31 21:43 2005) ## 
+### 1.2.0 (Jan 31 21:43 2005) ###
 
 * Turned off buffering ($|=1)
 * Changed default lockfile to /var/run/rsnapshot.pid, for FHS compliance
@@ -215,7 +222,7 @@ CHANGELOG
 * Added commented out du_args to rsnapshot.conf.default.in
 * Added descriptive error if "du" fails
 
-## 1.1.6 (Jul 05 16:35 2004) ## 
+### 1.1.6 (Jul 05 16:35 2004) ###
 
 * Moved the bulk of the program into smaller subroutines (finally)
 * show_disk_usage() now exits the program directly instead of returning a value
@@ -246,7 +253,7 @@ CHANGELOG
 * Fixed man page generation in "make tar" target
 * Changed -V message when there's no directory to rotate
 
-## 1.1.5 (Jun 20 20:56 2004) ## 
+### 1.1.5 (Jun 20 20:56 2004) ###
 
 * /bin/rm is the default for deleting directories (in the default config file)
 * Removed redundant validation (re: intervals) in execution section
@@ -264,7 +271,7 @@ CHANGELOG
 * Added manual link() call when we're using --link-dest and a single file
 * Don't call syslog in bail() if it's a test run
 
-## 1.1.4 (May 16 23:44 2004) ## 
+### 1.1.4 (May 16 23:44 2004) ###
 
 * (re)added the cmd_rm parameter. rmtree() can't delete some obscure files on some systems
 * Added rm_rf() stub function to recursively remove things using either rmtree() or /bin/rm -rf, depending on the configuration.
@@ -278,7 +285,7 @@ CHANGELOG
 * Added DEBIAN/copyright file
 * Fixed man page to say RSNAPSHOT instead of RSNAPSHOT-PROGRAM for the title
 
-## 1.1.3 (Apr 06 14:24 2004) ## 
+### 1.1.3 (Apr 06 14:24 2004) ###
 
 * Validating rsync_short_args, must be in format '-an', not '-a -n'
 * Assembling @cmd_stack list one at a time, rather than using join()
@@ -286,18 +293,18 @@ CHANGELOG
 * Fixed latent display bug in print_msg() (now that it's getting used)
 * Fixed "cd //" display bug when running from root directory (removed extra /)
 
-## 1.1.2 (Mar 17 02:12 2004) ## 
+### 1.1.2 (Mar 17 02:12 2004) ###
 
 * Fixed slash formatting issue with non-ssh rsync protocol calls
 * Fixed a slightly inconvenient permissions issue in rsnaptar
 * Added support for arbitrary arguments to backup_script files
 
-## 1.1.1 (Feb 11 23:24 2004) ## 
+### 1.1.1 (Feb 11 23:24 2004) ###
 
 * Changed some fatal errors to warnings in some recursive subroutines
 * Added optional GPG support to the rsnaptar utility shell script
 
-## 1.1.0 (Jan 24 16:41 2004) ## 
+### 1.1.0 (Jan 24 16:41 2004) ###
 
 * The first interval must now have a value of at least 2 if more than one interval is being used
 * Now allows "/" as a backup point on the local drive
@@ -319,7 +326,7 @@ CHANGELOG
 * Changed indentation in print_cmd() to 4 spaces instead of 2
 * Fixed bug where a file named "tmp" in the snapshot root would not be deleted properly at runtime (if sync_if_different() was used)
 
-## 1.0.10 (Jan 20 00:43 2004) ## 
+### 1.0.10 (Jan 20 00:43 2004) ###
 
 * Added link_dest option, to use the --link-dest flag with rsync
 * Now checking the return values from rsync, with conditional syntax warning for --link-dest on older ## versions ## 
@@ -331,7 +338,7 @@ CHANGELOG
 * Changed rotate_interval() subroutine to simply move directories from lower intervals up instead of recursively copying hard links
 * Added formatting subroutine to wrap all verbose command output at 80 columns
 
-## 1.0.9 (Jan 6 19:17 2004) ## 
+### 1.0.9 (Jan 6 19:17 2004) ###
 
 * Added backup_mysql.sh example script in utils/ to backup a MySQL database
 * Added backup_smb_share.sh example script in utils/ to backup an SMB share
@@ -339,7 +346,7 @@ CHANGELOG
 * Added optional "verbose" field to the config file, with values 1-5
 * Fixed lockfile code to not run in test mode
 
-## 1.0.8 (Dec 26 12:56 2003) ## 
+### 1.0.8 (Dec 26 12:56 2003) ###
 
 * Added backup_script option to have rsnapshot invoke backup scripts directly
 * Added two example backup scripts in the utils/ directory, one for Postgres, and one for downloading the CVS root for rsnapshot
@@ -349,14 +356,14 @@ CHANGELOG
 * Removed redundant rsync arguments from the default
 * Moved add_lockfile() call so it runs later in the program
 
-## 1.0.7 (Dec 19 19:22 2003) ## 
+### 1.0.7 (Dec 19 19:22 2003) ###
 
 * Added ssh_args parameter to pass arbitrary args to ssh
 * Fully integrated Autoconf build support for the program and config file
 * Provided more helpful error messages when the config file is not found
 * Fixed false "Can not remove lockfile" error when cmd_ssh is not defined but is referenced later in backup points
 
-## 1.0.6 (Nov 26 21:03 2003) ## 
+### 1.0.6 (Nov 26 21:03 2003) ###
 
 * added \n to utime() debug message
 * moved all rsync calls into dynamically populated arrays
@@ -365,7 +372,7 @@ CHANGELOG
 * Fixed "make install" vs. INSTALL bug for Mac OS X
 * Ted Zlatanov <tzz@lifelogs.com> added Autoconf support!
 
-## 1.0.5 (Nov 14 00:22 2003) ## 
+### 1.0.5 (Nov 14 00:22 2003) ###
 
 * Changed domain to rsnapshot.org
 * Added lockfile feature, with patch to enable it by default in the RPM
@@ -374,54 +381,54 @@ CHANGELOG
 * Updated Makefile to use "install", now allows "make tar" as a non-root user
 * Moved most remaining regexes into dedicated subroutines
 
-## 1.0.4 (Nov 6 23:18 2003) ## 
+### 1.0.4 (Nov 6 23:18 2003) ###
 
 * Added one_fs feature to the config file (same as -x on the command line)
 * Fixed anonymous rsync feature, which had been broken in 1.0.3
 * Added verification data to the RPM package
 
-## 1.0.3 (Nov 2 14:43 2003) ## 
+### 1.0.3 (Nov 2 14:43 2003) ###
 
 * Carl Wilhelm Soderstrom <chrome@real-time.com> added RPM format to release.
 * Added "one filesystem" option to prevent rsnapshot from crossing filesystems within a backup point. Patch provided by Ted Zlatanov <tzz@lifelogs.com>
 * Minor typographical errors fixed.
 
-## 1.0.2 (Oct 24 23:22 2003) ## 
+### 1.0.2 (Oct 24 23:22 2003) ###
 
 * added -V "extra verbose" option, to show rsync verbose output
 
-## 1.0.1 (Oct 18 03:22 2003) ## 
+### 1.0.1 (Oct 18 03:22 2003) ###
 
 * Make sure the snapshot directory either needs to be created or already is a directory. Previously we were checking only if the snapshot root existed, which would cause problems if it were a file.
 * Cleaned up and streamlined the config file parsing portion of the code.
 * Changed numeric comparisons so that a typo would prevent compilation, instead of acting weird. i.e. (0 == $foo) instead of ($foo == 0)
 
-## 1.0.0 (Sep 14 02:58 2003) ## 
+### 1.0.0 (Sep 14 02:58 2003) ###
 
 * Removed backward compatibility cruft for mkdir, touch, rm, and mv.
 * rsnapshot has now been tested successfully on Debian and Redhat Linux, as well as IRIX and Solaris.
 * Man pages are no longer gzipped, for compatibility with Solaris and others.
 
-## 0.9.5 (Sep 9 20:11 2003) ## 
+### 0.9.5 (Sep 9 20:11 2003) ###
 
 * Removed most dependencies on external shell programs.
 * Added compatibility for non-Linux platforms.
 * Did significant testing/debugging to ensure compatibility with perl 5.004, 5.6, and 5.8
 * Tested and working successfully on IRIX, more tests to follow.
 
-## 0.9.4 (Sep 1 23:55 2003) ## 
+### 0.9.4 (Sep 1 23:55 2003) ###
 
 * Heavily commented variables, and added much stricter syntax checking of the config file.
 * Additional error checking on mkdir
 * updated the man page.
 
-## 0.9.3 (Sep 1 01:46 2003) ## 
+### 0.9.3 (Sep 1 01:46 2003) ###
 
 * Anonymous rsync connections now supported.
 * Reverted back from recycling the oldest snapshots to the tried and true method of deleting the old ones.
 * Now rsnapshot will not only create the snapshot root directory as it did before, but it will also chmod 0700 the directory when it creates it.
 
-## 0.9.2 (Aug 31 04:08 2003) ## 
+### 0.9.2 (Aug 31 04:08 2003) ###
 
 * Optimized rotating snapshot intervals by recycling the last directory to the first, instead of deleting the last and copying .0 to .1
 * Added support for spaces in path names.

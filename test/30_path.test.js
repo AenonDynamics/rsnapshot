@@ -23,7 +23,7 @@ describe('path', function(){
 
     it('should pass - valid, minimal config with whitespaces in backup source', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -36,7 +36,7 @@ describe('path', function(){
 
     it('should pass - valid, minimal config with whitespaces in backup source with additional arguments', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -49,7 +49,7 @@ describe('path', function(){
 
     it('should pass - valid, minimal config with whitespaces in snapshot root', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -62,7 +62,7 @@ describe('path', function(){
 
     it('should pass - valid, minimal config with whitespaces in snapshot root and backup source', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,

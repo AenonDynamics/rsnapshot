@@ -13,7 +13,7 @@ describe('rsync', function(){
     it('should fail - simulated exit code 1 (rsync failed)', async function(){
         try{
             await _lib.rsnapshotDynamicConfig([
-                'config_version 1.3',
+                'config_version 2.0',
                 `cmd_cp ${_lib.bin.cp}`,
                 `cmd_rsync ${_lib.bin.false}`,
                 `snapshot_root ${_lib.path.snapshotRoot}`,
@@ -32,7 +32,7 @@ describe('rsync', function(){
 
     it('should pass - 1st snapshot using GNU cp', async function(){
         await _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,
@@ -47,7 +47,7 @@ describe('rsync', function(){
 
     it('should pass - 2nd snapshot using GNU cp', async function(){
         await _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,
@@ -62,7 +62,7 @@ describe('rsync', function(){
 
     it('should pass - using rsync-long-arg (--no-relative) within config', async function(){
         await _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,
@@ -78,7 +78,7 @@ describe('rsync', function(){
 
     it('should pass - using rsync-long-arg (--no-relative) inline', async function(){
         await _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,
@@ -93,7 +93,7 @@ describe('rsync', function(){
 
     it('should pass - using rsync-short-args (-n) within config', async function(){
         await _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,
@@ -111,7 +111,7 @@ describe('rsync', function(){
 
     it('should pass - using rsync-short-args (-n) inline', async function(){
         await _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,

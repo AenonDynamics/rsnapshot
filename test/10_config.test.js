@@ -12,7 +12,7 @@ describe('configtest', function(){
 
     it('should pass - valid, minimal config', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -43,7 +43,7 @@ describe('configtest', function(){
 
     it('should fail - no_create_root has been set and the directory is missing', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -62,7 +62,7 @@ describe('configtest', function(){
 
     it('should pass - no_create_root has been disable and the directory is missing', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -92,7 +92,7 @@ describe('configtest', function(){
 
     it('should pass - tabs are used as config delimiter', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version\t1.3',
+            'config_version\t2.0',
             `cmd_cp\t${_lib.bin.cp}`,
             `cmd_rm\t${_lib.bin.rm}`,
             `cmd_rsync\t${_lib.bin.rsync}`,
@@ -105,7 +105,7 @@ describe('configtest', function(){
 
     it('should pass - multiple spaces are used as config delimiter', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version    1.3',
+            'config_version    2.0',
             `cmd_cp    ${_lib.bin.cp}`,
             `cmd_rm                   ${_lib.bin.rm}`,
             `cmd_rsync   ${_lib.bin.rsync}`,
@@ -118,7 +118,7 @@ describe('configtest', function(){
 
     it('should pass - mixed spaces and tabs are used as config delimiter', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version \t\t   1.3',
+            'config_version \t\t   2.0',
             `cmd_cp\t   ${_lib.bin.cp}`,
             `cmd_rm\t\t\t\t\t\t${_lib.bin.rm}`,
             `cmd_rsync                        ${_lib.bin.rsync}`,
@@ -132,7 +132,7 @@ describe('configtest', function(){
 
     it('should pass - multiple leading/trailing whitespaces', function(){
         return _lib.rsnapshotDynamicConfig([
-            '\tconfig_version    1.3',
+            '\tconfig_version    2.0',
             `cmd_cp    ${_lib.bin.cp}\t     \t  `,
             `\t   cmd_rm                   ${_lib.bin.rm}`,
             `   \tcmd_rsync   ${_lib.bin.rsync}`,
@@ -145,7 +145,7 @@ describe('configtest', function(){
 
     it('should pass - parse configtest output', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -164,7 +164,7 @@ describe('configtest', function(){
 
     it('should pass - validate configtest output', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,

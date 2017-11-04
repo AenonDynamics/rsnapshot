@@ -12,7 +12,7 @@ describe('cmd', function(){
 
     it('should pass - preexec=success, postexec=success (with arguments; snapshot created)', async function(){
         await _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -40,7 +40,7 @@ describe('cmd', function(){
     it('should fail - preexec=fail, postexec=success (no snapshot created; postexec not executed)', async function(){
         try{
             await _lib.rsnapshotDynamicConfig([
-                'config_version 1.3',
+                'config_version 2.0',
                 `cmd_cp ${_lib.bin.cp}`,
                 `cmd_rm ${_lib.bin.rm}`,
                 `cmd_rsync ${_lib.bin.rsync}`,
@@ -73,7 +73,7 @@ describe('cmd', function(){
     it('should fail - preexec=success, postexec=fail (snapshot created)', async function(){
         try{
             await _lib.rsnapshotDynamicConfig([
-                'config_version 1.3',
+                'config_version 2.0',
                 `cmd_cp ${_lib.bin.cp}`,
                 `cmd_rm ${_lib.bin.rm}`,
                 `cmd_rsync ${_lib.bin.rsync}`,
@@ -105,7 +105,7 @@ describe('cmd', function(){
 
     it('should fail - preexec=fail, postexec=fail', function(){
         return _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rm ${_lib.bin.rm}`,
             `cmd_rsync ${_lib.bin.rsync}`,
@@ -127,7 +127,7 @@ describe('cmd', function(){
     it('should fail - preexec=success, postexec=success, backup=fail (postexec not executed)', async function(){
          try{
             await _lib.rsnapshotDynamicConfig([
-                'config_version 1.3',
+                'config_version 2.0',
                 `cmd_cp ${_lib.bin.cp}`,
                 `cmd_rm ${_lib.bin.rm}`,
                 `cmd_rsync ${_lib.bin.rsync}`,

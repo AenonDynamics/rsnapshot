@@ -5,28 +5,25 @@ RSNAPSHOT-NG
 
 **rsnapshot-ng comes with ABSOLUTELY NO WARRANTY.**
 
-This is free software, and you are welcome to redistribute it under certain conditions. See the [GNU General Public Licence](LICENSE.md) for details.
+This is free software, and you are welcome to redistribute it under certain conditions. See the [GNU General Public Licence](LICENSE.txt) for details.
 
 Features
 ----------------------------------------------------------------------------------
 
 **rsnapshot-ng** is a fork of [rsnapshot](https://github.com/rsnapshot/rsnapshot) including some basic improvements and a modern build/test environment.
 
-rsnapshot is a filesystem snapshot utility based on rsync. rsnapshot makes it easy to make periodic snapshots of local machines, and remote machines over ssh.
-The code makes **extensive use of hard links** whenever possible, to greatly reduce the disk space required.
-
-It is written entirely in perl with no module dependencies, and has been tested with versions 5.004 through 5.16.3. It should work on any reasonably
-modern UNIX compatible OS.
-
-The [HOWTO](HOWTO.md) will give you a detailed walk-through on how to get rsnapshot up and running in explicit detail.
+* rsnapshot is a filesystem snapshot utility based on rsync. rsnapshot makes it easy to make periodic snapshots of local machines, and remote machines over ssh/rsyncd.
+* The code makes **extensive use of hard links** whenever possible, to greatly reduce the disk space required.
+* It is written entirely in perl with no module dependencies, and has been tested with versions 5.14 through 5.24. It should work on any reasonably modern UNIX compatible OS.
+* The [HOWTO](HOWTO.md) will give you a detailed walk-through on how to get rsnapshot up and running in explicit detail.
 
 Enhancements
 ------------------------------------------------------
 
 * Config files can contain **spaces** and **tabs** as delimiters
-* Pure Perl script without build system - you can used it directly on any device
+* Pure Perl script without build system - you can used it directly on any device (just modify the config)
 * `rsync` output is shown on verbosity level >= 3
-* Advanced Javascript based testcases
+* Advanced Javascript based [testcases](test/README.md)
 
 Documentation and References
 --------------------------------------------------------------
@@ -38,12 +35,14 @@ Some recommended tutorials/usage guides
 * [ubuntuusers.de - Tutorial](https://wiki.ubuntuusers.de/rsnapshot/)
 * [thomas-krenn.com - Backup unter Linux mit rsnapshot](https://www.thomas-krenn.com/de/wiki/Backup_unter_Linux_mit_rsnapshot)
 
-Config File Syntax
+Backward Compatibility
 --------------------------------------------------------------
+
+### Config File Syntax ###
 
 **The config file syntax has changed compared to the classic rsnapshot files.**
 
-Now it's allowed to use any kind of whitespaces (**spaces** and **tabs**) as command/value delimiter. To identify the "new" version you have to set `config_version 1.3` (compatibility)
+Now it's allowed to use any kind of whitespaces (**spaces** and **tabs**) as command/value delimiter. To identify the "new" version you have to set `config_version 2.0` (compatibility)
 
 Syntax: **keyword** `value0` [`value1` [ `value2`]]
 
@@ -90,7 +89,7 @@ be beta snapshots taken every night at 11:50PM. The number of snapshots that are
 For example:
 
 ```conf
-interval alpha 6
+retain alpha 6
 ```
 
 This means that every time `rsnapshot alpha` is run, it will make a
@@ -137,6 +136,6 @@ Please see the [AUTHORS](AUTHORS.md) file for the complete list of contributors.
 License
 -------
 
-**rsnapshot-ng** is OpenSource and licensed under the Terms of [GNU General Public Licence v2](LICENSE.md). You're welcome to contribute!
+**rsnapshot-ng** is OpenSource and licensed under the Terms of [GNU General Public Licence v2](LICENSE.txt). You're welcome to [contribute](CONTRIBUTE.md)!
 
 Many Thanks to the authors of the original [rsnapshot](https://github.com/rsnapshot/rsnapshot)

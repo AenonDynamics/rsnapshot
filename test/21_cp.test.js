@@ -11,7 +11,7 @@ describe('copy:gnu_cp/perl_cp', function(){
 
     it('should pass - 1st snapshot using GNU cp', async function(){
         await _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,
@@ -26,7 +26,7 @@ describe('copy:gnu_cp/perl_cp', function(){
 
     it('should pass - 2nd snapshot using GNU cp', async function(){
         await _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_cp ${_lib.bin.cp}`,
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,
@@ -41,7 +41,7 @@ describe('copy:gnu_cp/perl_cp', function(){
 
     it('should pass - 3rd snapshot using internal cp', async function(){
         await _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,
             'retain alpha 6',
@@ -55,7 +55,7 @@ describe('copy:gnu_cp/perl_cp', function(){
 
     it('should pass - 4th snapshot using internal cp', async function(){
         await _lib.rsnapshotDynamicConfig([
-            'config_version 1.3',
+            'config_version 2.0',
             `cmd_rsync ${_lib.bin.rsync}`,
             `snapshot_root ${_lib.path.snapshotRoot}`,
             'retain alpha 6',
