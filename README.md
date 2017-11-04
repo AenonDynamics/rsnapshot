@@ -1,6 +1,5 @@
 [Features](#features) | 
-[Enhancements](#enhancements) | 
-[Documentation and References](#documentation-and-references) | 
+[Documentation](#documentation-and-references) | 
 [System Requirements](#system-requirements) | 
 [Backward Compatibility](#backward-compatibility) | 
 [Config File Syntax](#config-file-syntax) | 
