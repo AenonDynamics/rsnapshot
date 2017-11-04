@@ -1,3 +1,11 @@
+[Features](#features) | 
+[Enhancements](#enhancements) | 
+[Documentation and References](#documentation-and-references) | 
+[System Requirements](#system-requirements) | 
+[Backward Compatibility](#backward-compatibility) | 
+[Config File Syntax](#config-file-syntax) | 
+[Usage](#usage)
+
 [![Build Status](https://travis-ci.org/AenonDynamics/rsnapshot-ng.svg?branch=ng)](https://travis-ci.org/AenonDynamics/rsnapshot-ng)
 
 RSNAPSHOT-NG
@@ -46,11 +54,16 @@ System Requirements
 Backward Compatibility
 --------------------------------------------------------------
 
-### Deprecated Features/Config Keys**
+### Breaking Changes ###
+
+* The config file syntax has been changed
+
+### Deprecated Features ###
 
 * The config directive `interval` has been removed (already deprecated) and replace by the `retain` directive
 
-### Config File Syntax ###
+Config File Syntax
+--------------------------------------------------------------
 
 **The config file syntax has changed compared to the classic rsnapshot files.**
 
