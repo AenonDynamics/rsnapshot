@@ -35,8 +35,20 @@ Some recommended tutorials/usage guides
 * [ubuntuusers.de - Tutorial](https://wiki.ubuntuusers.de/rsnapshot/)
 * [thomas-krenn.com - Backup unter Linux mit rsnapshot](https://www.thomas-krenn.com/de/wiki/Backup_unter_Linux_mit_rsnapshot)
 
+
+System Requirements
+--------------------------------------------------------------
+
+* Linux based OS
+* At a minimum: `perl` (>= 5.14 requires), `rsync` (>=3.1.1 recommended)
+* Optionally: `ssh`, `logger`, GNU `cp`, GNU `du`
+
 Backward Compatibility
 --------------------------------------------------------------
+
+### Deprecated Features/Config Keys**
+
+* The config directive `interval` has been removed (already deprecated) and replace by the `retain` directive
 
 ### Config File Syntax ###
 
@@ -58,11 +70,13 @@ Usage
 ------------------------------------------------------
 
 Once you have installed rsnapshot, you will need to configure it.
-The default configuration file is /etc/rsnapshot.conf, although the exact path may be different depending on how the program was installed. 
+The default configuration file is `/etc/rsnapshot.conf`, although the exact path may be different depending on how the program was installed. 
 If this file does not exist, copy `rsnapshot.default.conf` over to `/etc/rsnapshot.conf` and edit it to suit your tastes. 
-See the man page for the full list of configuration options.
+See the docs for the full list of configuration options.
 
 When `/etc/rsnapshot.conf` contains your chosen settings, do a quick sanity check to make sure everything is ready to go:
+
+**Testing your config**
 
 ```terminal
 $ rsnapshot configtest
@@ -74,30 +88,30 @@ If this works, you can see essentially what will happen when you run it for real
 $ rsnapshot -t [interval]
 ```
 
-Once you are happy with everything, the final step is to setup a cron job to
-automate your backups. Here is a quick example which makes backups every four
-hours, and beta backups for a week:
+**Cronjob Example**
+
+Once you are happy with everything, the final step is to setup a cron job to automate your backups. 
+Here is a quick example which makes backups every four hours, and beta backups for a week:
 
 ```conf
 0 */4 * * *     /usr/local/bin/rsnapshot alpha
 50 23 * * *     /usr/local/bin/rsnapshot beta
 ```
 
-In the previous example, there will be six `alpha` snapshots taken each day (at 0,4,8,12,16, and 20 hours). There will also
-be beta snapshots taken every night at 11:50PM. The number of snapshots that are saved depends on the "interval" settings in `/etc/rsnapshot.conf`
+**Single Backup Interval**
 
-For example:
+In the previous example, there will be six `alpha` snapshots taken each day (at 0,4,8,12,16, and 20 hours). There will also
+be beta snapshots taken every night at 11:50PM. The number of snapshots that are saved depends on the **retain** settings in `/etc/rsnapshot.conf`
 
 ```conf
 retain alpha 6
 ```
 
-This means that every time `rsnapshot alpha` is run, it will make a
-new snapshot, rotate the old ones, and retain the most recent six
-(`alpha.0` - `alpha.5`).
+This means that every time `rsnapshot alpha` is run, it will make a new snapshot, rotate the old ones, and retain the most recent six (`alpha.0` - `alpha.5`).
 
-If you prefer instead to have three levels of backups (which we'll
-call `beta`, `gamma` and `delta`), you might set up cron like this:
+**Multiple Backup Stages/Intervals**
+
+If you prefer instead to have three levels of backups (which we'll call `beta`, `gamma` and `delta`), you might set up cron like this:
 
 ```conf
 00 00 * * *     /usr/local/bin/rsnapshot beta
@@ -105,28 +119,15 @@ call `beta`, `gamma` and `delta`), you might set up cron like this:
 00 22 1 * *     /usr/local/bin/rsnapshot delta
 ```
 
-This specifies a `beta` rsnapshot at midnight, a `gamma` snapshot
-on Saturdays at 11:00pm and a `delta` rsnapshot at 10pm on the
-first day of each month.
+This specifies a `beta` rsnapshot at midnight, a `gamma` snapshot on Saturdays at 11:00pm and a `delta` rsnapshot at 10pm on the first day of each month.
 
-Note that the backups are done from the highest interval first
-(in this case `delta`) and go down to the lowest interval.  If
-you are not having cron invoke the `alpha` snapshot interval,
-then you must also ensure that `alpha` is not listed as one of
-your intervals in rsnapshot.conf (for example, comment out alpha,
-so that `beta` becomes the lowest interval).
+Note that the backups are done from the highest interval first (in this case `delta`) and go down to the lowest interval.  
+If you are not having cron invoke the `alpha` snapshot interval, then you must also ensure that `alpha` is not listed as one of
+your intervals in rsnapshot.conf (for example, comment out alpha, so that `beta` becomes the lowest interval).
 
-Remember that it is only the lowest interval which actually does
-the rsync to back up the relevant source directories, the higher
-intervals just rotate snapshots around.  Unless you have enabled
-`sync_first` in your configuration-file, in which case only the `sync`
-pseudo-interval does the actual rsync, and all real intervals
-just rotate snapshots.
-
-For the full documentation, type `man rsnapshot` once it is installed,
-or visit http://www.rsnapshot.org/.  The HowTo on the web site has a
-detailed overview of how to install and configure rsnapshot, and things
-like how to set it up so users can restore their own files.
+Remember that it is **only the lowest interval which actually does the rsync to back up the relevant source directories**, the higher
+intervals just rotate snapshots around.  Unless you have enabled `sync_first` in your configuration-file, in which case only the `sync`
+pseudo-interval does the actual rsync, and all real intervals just rotate snapshots.
 
 Authors
 --------------------------------------------------------
