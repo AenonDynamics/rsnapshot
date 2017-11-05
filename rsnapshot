@@ -1,29 +1,23 @@
 #!/usr/bin/env perl
 
-########################################################################
-#                                                                      #
-# RSNAPSHOT-NG                                                         #
-# a fork of the classic rsnapshot                                      #
-# https://github.com/AenonDynamics/rsnapshot-ng                        #
-#                                                                      #
-########################################################################
-#                                                                      #
-# Copyright (C) 2003-2005 Nathan Rosenquist                            #
-#                                                                      #
-# Portions Copyright (C) 2002-2006 Mike Rubel, Carl Wilhelm Soderstrom,#
-# Ted Zlatanov, Carl Boe, Shane Liebling, Bharat Mediratta,            #
-# Peter Palfrader, Nicolas Kaiser, David Cantrell, Chris Petersen,     #
-# Robert Jackson, Justin Grote, David Keegel, Alan Batie               #
-#                                                                      #
-# rsnapshot comes with ABSOLUTELY NO WARRANTY.  This is free software, #
-# and you may copy, distribute and/or modify it under the terms of     #
-# the GNU GPL (version 2 or at your option any later version).         #
-# See the GNU General Public License (in file: COPYING) for details.   #
-#                                                                      #
-# Based on code originally by Mike Rubel                               #
-# http://www.mikerubel.org/computers/rsync_snapshots/                  #
-#                                                                      #
-########################################################################
+#####################################################################################
+#                                                                                   #
+#                  RSNAPSHOT-NG - an enhanced rsnapshot fork                        #
+#                                                                                   #
+#       Copyright (C) 2003-2005 Nathan Rosenquist and 2002-2017 Contributors        #
+#                                                                                   #
+#                      Based on code originally by Mike Rubel                       #
+#                http://www.mikerubel.org/computers/rsync_snapshots/                #
+#                                                                                   #
+# ISSUES: https://github.com/AenonDynamics/rsnapshot-ng                             #
+# LICENSE: GNU General Public License 2 or later                                    #
+#                                                                                   #
+# rsnapshot-ng comes with ABSOLUTELY NO WARRANTY.                                   #
+# This is free software, and you may copy, distribute and/or modify it under the    #
+# terms of the GNU GPL (version 2 or at your option any later version).             #
+# See the GNU General Public License 2 for details.                                 #
+#                                                                                   #
+#####################################################################################
 
 ########################################
 ###         STANDARD MODULES         ###

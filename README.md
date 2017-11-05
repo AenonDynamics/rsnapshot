@@ -151,4 +151,4 @@ License
 
 **rsnapshot-ng** is OpenSource and licensed under the Terms of [GNU General Public Licence v2](LICENSE.txt). You're welcome to [contribute](CONTRIBUTE.md)!
 
-Many Thanks to the authors of the original [rsnapshot](https://github.com/rsnapshot/rsnapshot)
+Many Thanks to the contributors of [rsnapshot](https://github.com/rsnapshot/rsnapshot) and [Mike Rubel](http://www.mikerubel.org/computers/rsync_snapshots/) author of rsync_snapshots
