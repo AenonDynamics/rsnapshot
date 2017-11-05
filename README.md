@@ -83,7 +83,7 @@ Usage
 
 Once you have installed rsnapshot, you will need to configure it.
 The default configuration file is `/etc/rsnapshot.conf`, although the exact path may be different depending on how the program was installed. 
-If this file does not exist, copy `rsnapshot.default.conf` over to `/etc/rsnapshot.conf` and edit it to suit your tastes. 
+If this file does not exist, copy `rsnapshot.conf` over to `/etc/rsnapshot.conf` and edit it to suit your tastes.
 See the docs for the full list of configuration options.
 
 When `/etc/rsnapshot.conf` contains your chosen settings, do a quick sanity check to make sure everything is ready to go:
