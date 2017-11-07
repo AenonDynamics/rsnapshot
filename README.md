@@ -47,7 +47,7 @@ System Requirements
 --------------------------------------------------------------
 
 * Linux based OS
-* At a minimum: `perl` (>= 5.14 requires), `rsync` (>=3.1.1 recommended)
+* At a minimum: `perl` (>= 5.14 required), `rsync` (>=3.1.1 recommended)
 * Optionally: `ssh`, `logger`, GNU `cp`, GNU `du`
 
 Backward Compatibility
@@ -59,7 +59,7 @@ Backward Compatibility
 
 ### Deprecated Features ###
 
-* The config directive `interval` has been removed (already deprecated) and replace by the `retain` directive
+* The deprecated config directive `interval` has been removed (replaced by `retain`)
 
 Config File Syntax
 --------------------------------------------------------------

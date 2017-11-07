@@ -1,0 +1,16 @@
+[Unit]
+Description=rsnapshot backup for interval %I
+
+[Service]
+Type=oneshot
+
+# rsnapshot binary location
+ExecStart=/usr/bin/rsnapshot %I
+
+# lowest process priority
+# http://man7.org/linux/man-pages/man2/setpriority.2.html
+Nice=19
+
+# lowest io priority
+# http://man7.org/linux/man-pages/man2/ioprio_set.2.html
+IOSchedulingClass=idle

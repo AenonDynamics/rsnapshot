@@ -1,0 +1,57 @@
+{
+    "name": "rsnapshot-ng",
+    "version": "2.0.0",
+    "package-monster": "0.2.0",
+    "description": "rsync based local and remote filesystem snapshot utility",
+    "license": "GPL-2+",
+    "author": "Andi Dittrich <opensource@aenon-dynamics.com>",
+    "website": "https://github.com/AenonDynamics/rsnapshot-ng",
+    "bugs": "https://github.com/AenonDynamics/rsnapshot-ng/issues",
+    "multiversion": true,
+
+    "debian": {
+
+        "replaces": "rsnapshot",
+        "conflicts": "rsnapshot",
+        "section": "utils",
+        "priority": "optional",
+
+        "dependencies": [
+            "perl (>= 5.14)",
+            "rsync (>= 3.1.1)",
+            "liblchown-perl",
+            "ssh",
+            "logrotate"
+        ],
+
+        "recommends": [
+            "openssh-client | ssh-client"
+        ],
+
+        "conf": [
+            "rsnapshot.conf"
+        ],
+
+        "bin": [
+            "rsnapshot"
+        ],
+
+        "sbin": [
+        ],
+
+        "files": [
+            {
+                "src": "systemd/rsnapshot@.service",
+                "dst": "/lib/systemd/system/rsnapshot@.service"
+            },
+            {
+                "src": "logrotate/rsnapshot.logrotate",
+                "dst": "/etc/logrotate.d/rsnapshot"
+            }
+        ],
+
+        "scripts": {
+        }
+    }
+
+}
