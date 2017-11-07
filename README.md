@@ -1,9 +1,9 @@
 [Features](#features) | 
 [Documentation](#documentation-and-references) | 
-[System Requirements](#system-requirements) | 
 [Backward Compatibility](#backward-compatibility) | 
 [Config File Syntax](#config-file-syntax) | 
 [Usage](#usage)
+[systemd](#automation-via-systemd)
 
 [![Build Status](https://travis-ci.org/AenonDynamics/rsnapshot-ng.svg?branch=ng)](https://travis-ci.org/AenonDynamics/rsnapshot-ng)
 
@@ -140,6 +140,50 @@ your intervals in rsnapshot.conf (for example, comment out alpha, so that `beta`
 Remember that it is **only the lowest interval which actually does the rsync to back up the relevant source directories**, the higher
 intervals just rotate snapshots around.  Unless you have enabled `sync_first` in your configuration-file, in which case only the `sync`
 pseudo-interval does the actual rsync, and all real intervals just rotate snapshots.
+
+Automation via systemd
+--------------------------------------------------------
+
+rsnapshot-ng comes with [systemd](https://www.freedesktop.org/wiki/Software/systemd/) based invocation (service+timer) to easily handle backup tasks.
+
+The rsnapshot program is triggerd via a linked systemd-instance [service file](systemd/rsnapshot@.service) - therefore you do not need additional service files.
+
+**Example: Run Tasks alpha+beta manually**
+
+```terminal
+systemctl start rsnapshot@alpha.service
+systemctl start rsnapshot@beta.service
+```
+
+**Example: Run Task alpha automatically**
+
+For each triggerd interval you have to create a custom **systemd-timer** based on the example below.
+
+File: `/etc/systemd/system/rsnapshot-alpha.timer`
+
+```conf
+[Unit]
+Description=rsnapshot backup task alpha
+
+[Timer]
+# Run rsnapshot interval "alpha" at 04:30 am
+OnCalendar=04:30
+
+# do NOT start backup immediately if its missed (servers..)
+Persistent=false
+
+# linked unit
+Unit=rsnapshot@alpha.service
+
+[Install]
+WantedBy=timers.target
+```
+
+**Enable Timer**
+```terminal
+systemctl daemon-reload
+sytemctl enable rsnapshot-alpha.timer
+```
 
 Authors
 --------------------------------------------------------
