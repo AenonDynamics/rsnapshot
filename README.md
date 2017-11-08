@@ -1,6 +1,6 @@
 [Features](#features) | 
 [Documentation](#documentation-and-references) | 
-[Backward Compatibility](#backward-compatibility) | 
+[Installation](#package-installation) | 
 [Config File Syntax](#config-file-syntax) | 
 [Usage](#usage) | 
 [systemd](#automation-via-systemd)
@@ -42,13 +42,27 @@ Some recommended tutorials/usage guides
 * [ubuntuusers.de - Tutorial](https://wiki.ubuntuusers.de/rsnapshot/)
 * [thomas-krenn.com - Backup unter Linux mit rsnapshot](https://www.thomas-krenn.com/de/wiki/Backup_unter_Linux_mit_rsnapshot)
 
-
-System Requirements
+Package Installation
 --------------------------------------------------------------
 
-* Linux based OS
-* At a minimum: `perl` (>= 5.14 required), `rsync` (>=3.1.1 recommended)
-* Optionally: `ssh`, `logger`, GNU `cp`, GNU `du`
+There are currently two different methods available to install rsnapshot-ng
+
+### 1. All Systems - from Source ###
+
+Just download the [latest release from GitHub](https://github.com/AenonDynamics/rsnapshot-ng/releases) and extract the files in a directory of your choice (`/opt/rsnapshot-ng` for example).
+
+### 2. Debian - via Aenon-Dynamics Repository ###
+
+**Add Repository**
+
+See [AenonDynamics/CPR](https://github.com/AenonDynamics/CPR#debian-packages)
+
+**Installation**
+
+```
+apt-get update
+apt-get install rsnapshot-ng
+```
 
 Backward Compatibility
 --------------------------------------------------------------
@@ -60,6 +74,12 @@ Backward Compatibility
 ### Deprecated Features ###
 
 * The deprecated config directive `interval` has been removed (replaced by `retain`)
+
+### System Requirements ###
+
+* Linux based OS
+* At a minimum: `perl` (>= 5.14 required), `rsync` (>=3.1.1 recommended)
+* Optionally: `ssh`, `logger`, GNU `cp`, GNU `du`
 
 Config File Syntax
 --------------------------------------------------------------
