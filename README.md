@@ -2,7 +2,7 @@
 [Documentation](#documentation-and-references) | 
 [Backward Compatibility](#backward-compatibility) | 
 [Config File Syntax](#config-file-syntax) | 
-[Usage](#usage)
+[Usage](#usage) | 
 [systemd](#automation-via-systemd)
 
 [![Build Status](https://travis-ci.org/AenonDynamics/rsnapshot-ng.svg?branch=ng)](https://travis-ci.org/AenonDynamics/rsnapshot-ng)
