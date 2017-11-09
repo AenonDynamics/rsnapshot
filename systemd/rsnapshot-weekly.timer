@@ -1,0 +1,15 @@
+[Unit]
+Description=rsnapshot backup task weekly
+
+[Timer]
+# Run rsnapshot interval
+OnCalendar=Tue 04:00
+
+# do NOT start backup immediately if its missed (servers..)
+Persistent=false
+
+# linked unit
+Unit=rsnapshot@weekly.service
+
+[Install]
+WantedBy=timers.target

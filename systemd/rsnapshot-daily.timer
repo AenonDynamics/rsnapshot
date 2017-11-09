@@ -1,0 +1,15 @@
+[Unit]
+Description=rsnapshot backup task daily
+
+[Timer]
+# Run rsnapshot interval "alpha" at 04:30 am
+OnCalendar=04:30
+
+# do NOT start backup immediately if its missed (servers..)
+Persistent=false
+
+# linked unit
+Unit=rsnapshot@alpha.service
+
+[Install]
+WantedBy=timers.target

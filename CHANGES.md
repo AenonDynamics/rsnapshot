@@ -9,6 +9,7 @@ RSNAPSHOT-NG
 * Added: syslog identifier `rsnapshot-%I` to systemd service
 * Added: systemd notification example
 * Added: new cron example
+* Added: systemd timer examples for daily/weekly/monthly schedules
 * Bugfix: Added double quotes to config arguments
 * Bugfix: Default config file contained wrong logfile path (doesn't match logrotate.d) - now `/var/log/rsnapshot.log`
 

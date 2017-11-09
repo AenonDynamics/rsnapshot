@@ -222,6 +222,14 @@ Tue 2017-11-14 04:00:00 UTC  4 days left         n/a                          n/
 Fri 2017-12-01 03:50:00 UTC  3 weeks 0 days left n/a                          n/a          rsnapshot-monthly.timer      rsnapshot@monthly.service
 ```
 
+**Example: daily/weekly/monthly schedules**
+
+A common used backup scheme/configuration is available within the [systemd/ directory](systemd/) including pre-configured timers:
+
+* [daily](systemd/rsnapshot-daily.timer) timer
+* [weekly](systemd/rsnapshot-weekly.timer) timer
+* [monthly](systemd/rsnapshot-monthly.timer) timer
+
 Authors
 --------------------------------------------------------
 
