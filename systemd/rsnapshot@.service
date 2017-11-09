@@ -2,10 +2,19 @@
 Description=rsnapshot backup for interval %I
 
 [Service]
+# Service is just a script, no deamon; ExecStop will be directly invoked after ExecStart
 Type=oneshot
 
 # rsnapshot binary location
 ExecStart=/usr/bin/rsnapshot %I
+
+# Syslog Name
+SyslogIdentifier=rsnapshot-%I
+
+# Notification Example - Send User Notifications on backup complete (handle errors also)
+# @see https://www.freedesktop.org/software/systemd/man/systemd.exec.html
+# $SERVICE_RESULT, $EXIT_CODE, $EXIT_STATUS
+# ExecStop=/root/rsnapshot-notification.sh %I
 
 # lowest process priority
 # http://man7.org/linux/man-pages/man2/setpriority.2.html

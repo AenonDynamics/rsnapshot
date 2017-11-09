@@ -4,6 +4,14 @@ CHANGELOG
 RSNAPSHOT-NG
 -------------------------------------------------
 
+### 2.0.1-BETA1 ###
+
+* Added: syslog identifier `rsnapshot-%I` to systemd service
+* Added: systemd notification example
+* Added: new cron example
+* Bugfix: Added double quotes to config arguments
+* Bugfix: Default config file contained wrong logfile path (doesn't match logrotate.d) - now `/var/log/rsnapshot.log`
+
 ### 2.0.0 ###
 
 * Project Cleanup (Removed outdated utils, build tools/makefile)

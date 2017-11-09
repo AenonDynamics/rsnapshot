@@ -114,44 +114,23 @@ When `/etc/rsnapshot.conf` contains your chosen settings, do a quick sanity chec
 $ rsnapshot configtest
 ```
 
+**Dry-Run - show what will happen**
+
 If this works, you can see essentially what will happen when you run it for real by executing the following command (where interval is `alpha`, `beta`, `etc`):
 
 ```terminal
 $ rsnapshot -t [interval]
 ```
 
-**Cronjob Example**
+**Backups Stages**
 
-Once you are happy with everything, the final step is to setup a cron job to automate your backups. 
-Here is a quick example which makes backups every four hours, and beta backups for a week:
-
-```conf
-0 */4 * * *     /usr/local/bin/rsnapshot alpha
-50 23 * * *     /usr/local/bin/rsnapshot beta
-```
-
-**Single Backup Interval**
-
-In the previous example, there will be six `alpha` snapshots taken each day (at 0,4,8,12,16, and 20 hours). There will also
-be beta snapshots taken every night at 11:50PM. The number of snapshots that are saved depends on the **retain** settings in `/etc/rsnapshot.conf`
+The number of snapshots that are saved depends on the **retain** settings in `/etc/rsnapshot.conf`
 
 ```conf
 retain alpha 6
 ```
 
 This means that every time `rsnapshot alpha` is run, it will make a new snapshot, rotate the old ones, and retain the most recent six (`alpha.0` - `alpha.5`).
-
-**Multiple Backup Stages/Intervals**
-
-If you prefer instead to have three levels of backups (which we'll call `beta`, `gamma` and `delta`), you might set up cron like this:
-
-```conf
-00 00 * * *     /usr/local/bin/rsnapshot beta
-00 23 * * 6     /usr/local/bin/rsnapshot gamma
-00 22 1 * *     /usr/local/bin/rsnapshot delta
-```
-
-This specifies a `beta` rsnapshot at midnight, a `gamma` snapshot on Saturdays at 11:00pm and a `delta` rsnapshot at 10pm on the first day of each month.
 
 Note that the backups are done from the highest interval first (in this case `delta`) and go down to the lowest interval.  
 If you are not having cron invoke the `alpha` snapshot interval, then you must also ensure that `alpha` is not listed as one of
@@ -160,6 +139,32 @@ your intervals in rsnapshot.conf (for example, comment out alpha, so that `beta`
 Remember that it is **only the lowest interval which actually does the rsync to back up the relevant source directories**, the higher
 intervals just rotate snapshots around.  Unless you have enabled `sync_first` in your configuration-file, in which case only the `sync`
 pseudo-interval does the actual rsync, and all real intervals just rotate snapshots.
+
+Automation via cron
+--------------------------------------------------------
+
+**Cronjob Example**
+
+Once you are happy with everything, the final step is to setup a cron job to automate your backups. 
+Here is a quick example which makes `alpha` backups **every four hours**, `beta` backups **every day**, `gamma` backups **every tuesday** and `delta` backups **1st of month**
+
+File: `/etc/cron.d/rsnapshot`
+
+```conf
+# cron-config - m h dom mon dow <user> <command>
+
+# alpha backups, each 4hours
+0 */4 * * * root /usr/bin/rsnapshot alpha
+
+# beta backups, daily @3:00am
+0 3 * * * root /usr/bin/rsnapshot beta
+
+# gamma backups, weekly @tuesday 2:40am
+40 2 * * 2 root /usr/bin/rsnapshot gamma
+
+# delta backups, monthly 1st @2.20am
+20 2 1 * * root /usr/bin/rsnapshot delta
+```
 
 Automation via systemd
 --------------------------------------------------------
@@ -202,7 +207,19 @@ WantedBy=timers.target
 **Enable Timer**
 ```terminal
 systemctl daemon-reload
-sytemctl enable rsnapshot-alpha.timer
+systemctl enable rsnapshot-alpha.timer
+systemctl start  rsnapshot-alpha.timer
+```
+
+**View Active Timers**
+
+```terminal
+systemctl list-timers
+
+NEXT                         LEFT                LAST                         PASSED       UNIT                         ACTIVATES
+Fri 2017-11-10 04:30:00 UTC  17h left            n/a                          n/a          rsnapshot-daily.timer        rsnapshot@alpha.service
+Tue 2017-11-14 04:00:00 UTC  4 days left         n/a                          n/a          rsnapshot-weekly.timer       rsnapshot@weekly.service
+Fri 2017-12-01 03:50:00 UTC  3 weeks 0 days left n/a                          n/a          rsnapshot-monthly.timer      rsnapshot@monthly.service
 ```
 
 Authors
@@ -213,6 +230,6 @@ Please see the [AUTHORS](AUTHORS.md) file for the complete list of contributors.
 License
 -------
 
-**rsnapshot-ng** is OpenSource and licensed under the Terms of [GNU General Public Licence v2](LICENSE.txt). You're welcome to [contribute](CONTRIBUTE.md)!
+**rsnapshot-ng** is OpenSource and licensed under the Terms of [GNU General Public Licence v2](LICENSE). You're welcome to [contribute](CONTRIBUTE.md)!
 
 Many Thanks to the contributors of [rsnapshot](https://github.com/rsnapshot/rsnapshot) and [Mike Rubel](http://www.mikerubel.org/computers/rsync_snapshots/) author of rsync_snapshots
